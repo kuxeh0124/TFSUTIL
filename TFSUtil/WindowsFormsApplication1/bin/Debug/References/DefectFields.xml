@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Root xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Row>
+		<Field>Title</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Assigned To</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>State</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Start Date</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Due Date</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>PercentageDone</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Actual Effort</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Closed Date</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Priority</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Severity</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Planed Start Date</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Planned End Date</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Planned Effort(Man-Hours)</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>TargetVersion</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Area Path</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Iteration Path</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Feedback Type</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Defect Type</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Owner</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Testing Phase</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Remarks1</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Remarks2</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Remarks3</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Remarks4</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Migration Status</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Trial Migration Date</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Production Migration Date</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Stage Originated</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>RootCauseCategory</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>CorrectiveAction</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>PreventiveAction</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>No Of Retest</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Repro Steps</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>System Info</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>System CR No</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Test Script ID</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Status Update Comments</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Reported By</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Reported On</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Mode</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Company</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Closed In</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>CDS ID</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Resolved Date</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Chargeable</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Temporary Solution</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Permanent Solution</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Impacted Files</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Found In</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Integration Build</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Original Estimate</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>History</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+</Root>

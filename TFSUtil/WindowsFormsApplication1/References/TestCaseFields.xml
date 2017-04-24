@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Root xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Row>
+    <Field>Test Plan</Field>
+    <Displayed>Yes</Displayed>
+  </Row>  
+	<Row>
+		<Field>Title</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>State</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Assigned To</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Priority</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Automation status</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Test Case ID</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Area Path</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Iteration Path</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Text Field 1</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Text Field 2</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Text Field 3</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Text Field 4</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Description</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Pre-Condition</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>History</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Automated Test Name</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Automated Test Storage</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Automated Test Type</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Parameters</Field>
+		<Displayed>No - But will be added in template</Displayed>
+	</Row>
+  <Row>
+    <Field>Step No</Field>
+    <Displayed>Yes</Displayed>
+  </Row>
+  <Row>
+		<Field>Step Title</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+  <Row>
+    <Field>Step Expected Result</Field>
+    <Displayed>Yes</Displayed>
+  </Row>  
+</Root>
