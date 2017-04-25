@@ -538,6 +538,71 @@ namespace TFSUtil.Internals
             }
         }
 
+        public void readExcelDataForTC(string filePath, string wiType)
+        {
+            string fileName = filePath.Substring(filePath.LastIndexOf("\\"));
+            string compDestPath = destPath + wiType + fileName;
+            string getKey = "";
+            string getValue = "";
+            List<string> getValList = new List<string>();
+            excelInterop.Application xlApp = new excelInterop.Application();
+            excelInterop.Workbook wb = xlApp.Workbooks.Open(compDestPath);
+            excelInterop.Worksheet ws = (excelInterop.Worksheet)wb.Worksheets[1];
+            try
+            {
+                dicExData.Clear();
+                int totalColumns = ws.UsedRange.Columns.Count;
+                int totalRows = 0;
+                int getCols = 0;
+                int getRows = 0;
+                for(int cols=totalColumns; cols<=1; cols--)
+                {
+                    if(ws.Cells[1, cols].value2=="Step No")
+                    {
+                        getCols = cols;
+                        break;
+                    }
+                }
+                for(int rows=1; rows<=9999; rows++)
+                {
+                    if(String.IsNullOrEmpty(Convert.ToString(ws.Cells[rows, getCols])))
+                    {
+                        getRows = rows;
+                    }
+                }
+                for(int rows = 1; rows <= getRows; rows++)
+                {
+                    for (int cols = 1; cols <= totalColumns; cols++)
+                    {
+                        if (String.IsNullOrEmpty(Convert.ToString(ws.Cells[rows, cols].value2)) && cols==getCols)
+                        {
+                            break;
+                        }
+                        else if(String.IsNullOrEmpty(Convert.ToString(ws.Cells[rows, cols].value2)) && cols != getCols)
+                        {
+                            if (Convert.ToString(ws.Cells[1, cols].value2)=="ID")
+                            {
+                                //Put into dictionary
+                            }
+                        }
+                        else if (!String.IsNullOrEmpty(Convert.ToString(ws.Cells[rows, cols].value2)) && cols != getCols)
+                        {
+                        
+                        }                                   
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            finally
+            {
+                ReleaseExcel(wb, ws, xlApp);
+            }
+        }
+
         public void updateExcelData(string filePath, string wiType, Dictionary<string, string[]> dicUpdData, int valCtr = 0)
         {
             string fileName = filePath.Substring(filePath.LastIndexOf("\\"));

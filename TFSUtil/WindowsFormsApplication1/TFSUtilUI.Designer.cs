@@ -73,6 +73,8 @@
             this.txt_UploadDownloadTC = new System.Windows.Forms.TextBox();
             this.btn_Extract = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.txt_SuiteNumber = new System.Windows.Forms.TextBox();
             this.btn_addTCALL = new System.Windows.Forms.Button();
             this.btn_removeTC = new System.Windows.Forms.Button();
             this.btn_addTC = new System.Windows.Forms.Button();
@@ -94,8 +96,6 @@
             this.switchProjectsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.txt_SuiteNumber = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
             newConnectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.defMan.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -583,6 +583,22 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Download Test Cases From Suite";
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(260, 22);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(119, 13);
+            this.label7.TabIndex = 12;
+            this.label7.Text = "Suite Number (Optional)";
+            // 
+            // txt_SuiteNumber
+            // 
+            this.txt_SuiteNumber.Location = new System.Drawing.Point(137, 19);
+            this.txt_SuiteNumber.Name = "txt_SuiteNumber";
+            this.txt_SuiteNumber.Size = new System.Drawing.Size(117, 20);
+            this.txt_SuiteNumber.TabIndex = 11;
+            // 
             // btn_addTCALL
             // 
             this.btn_addTCALL.Location = new System.Drawing.Point(242, 151);
@@ -616,7 +632,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(285, 71);
+            this.label4.Location = new System.Drawing.Point(285, 73);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(108, 13);
             this.label4.TabIndex = 6;
@@ -625,7 +641,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 71);
+            this.label2.Location = new System.Drawing.Point(3, 73);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(74, 13);
             this.label2.TabIndex = 5;
@@ -753,22 +769,6 @@
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
-            // 
-            // txt_SuiteNumber
-            // 
-            this.txt_SuiteNumber.Location = new System.Drawing.Point(137, 19);
-            this.txt_SuiteNumber.Name = "txt_SuiteNumber";
-            this.txt_SuiteNumber.Size = new System.Drawing.Size(117, 20);
-            this.txt_SuiteNumber.TabIndex = 11;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(260, 22);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(119, 13);
-            this.label7.TabIndex = 12;
-            this.label7.Text = "Suite Number (Optional)";
             // 
             // TFSUtilUI
             // 

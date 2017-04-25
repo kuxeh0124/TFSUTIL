@@ -419,7 +419,18 @@ namespace TFSUtil
         {
             testmanTFS tmTfs = new testmanTFS();
             dicTCToExtract.Clear();
-            list_TCToExtract.Items.Clear();
+            try
+            {
+                if(dicTCToExtract.Count==0)
+                {
+                    list_TCToExtract.DataSource = new BindingSource();
+                }
+                //list_TCToExtract.DataSource = new BindingSource(dicTCToExtract, null);
+                //list_TCToExtract.DisplayMember = "Value";
+                //list_TCToExtract.ValueMember = "Key";
+            }
+            catch { }
+
             string getValue = "";
             try
             {
@@ -528,9 +539,17 @@ namespace TFSUtil
                         dicTCToExtract.Remove(((KeyValuePair<string, string>)item).Key.ToString());
                     }
                 }
-                list_TCToExtract.DataSource = new BindingSource(dicTCToExtract, null);
-                list_TCToExtract.DisplayMember = "Value";
-                list_TCToExtract.ValueMember = "Key";
+                if (dicTCToExtract.Count == 0)
+                {
+                    list_TCToExtract.DataSource = new BindingSource();
+                }
+                else
+                {
+                    list_TCToExtract.DataSource = new BindingSource(dicTCToExtract, null);
+                    list_TCToExtract.DisplayMember = "Value";
+                    list_TCToExtract.ValueMember = "Key";
+                }
+
             }
             catch { }
         }
