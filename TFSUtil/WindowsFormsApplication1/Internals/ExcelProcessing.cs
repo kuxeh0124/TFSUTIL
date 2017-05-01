@@ -22,6 +22,7 @@ namespace TFSUtil.Internals
         public Dictionary<string, string[]> dicExData = new Dictionary<string, string[]>();
         public List<int> getAllID = new List<int>();
         public int stepStart = 1;
+        public List<Dictionary<string, string>> extractedTC = new List<Dictionary<string, string>>();
 
         public static void ReleaseExcel(excelInterop.Workbook thisWb = null,
                                                          excelInterop.Worksheet thisWs = null,
@@ -546,16 +547,22 @@ namespace TFSUtil.Internals
             string getValue = "";
             List<string> getValList = new List<string>();
             excelInterop.Application xlApp = new excelInterop.Application();
-            excelInterop.Workbook wb = xlApp.Workbooks.Open(compDestPath);
+            excelInterop.Workbook wb = xlApp.Workbooks.Open(filePath);
+            //excelInterop.Workbook wb = xlApp.Workbooks.Open(compDestPath);
             excelInterop.Worksheet ws = (excelInterop.Worksheet)wb.Worksheets[1];
+            Dictionary<string, string> getTCDetailDic = new Dictionary<string, string>();
+            List<Dictionary<string, string>> getDicList = new List<Dictionary<string, string>>();
             try
             {
-                dicExData.Clear();
+                getTCDetailDic.Clear();
                 int totalColumns = ws.UsedRange.Columns.Count;
                 int totalRows = 0;
                 int getCols = 0;
                 int getRows = 0;
-                for(int cols=totalColumns; cols<=1; cols--)
+                string expResult = "";
+                string stepTitle = "";
+                string stepNo = "";                
+                for(int cols=totalColumns; cols>=1; cols--)
                 {
                     if(ws.Cells[1, cols].value2=="Step No")
                     {
@@ -565,34 +572,54 @@ namespace TFSUtil.Internals
                 }
                 for(int rows=1; rows<=9999; rows++)
                 {
-                    if(String.IsNullOrEmpty(Convert.ToString(ws.Cells[rows, getCols])))
+                    if(string.IsNullOrEmpty(Convert.ToString(ws.Cells[rows, getCols].value2)))
                     {
-                        getRows = rows;
+                        getRows = rows-1;
+                        break;
                     }
                 }
-                for(int rows = 1; rows <= getRows; rows++)
+                for(int rows = 2; rows <= getRows; rows++)
                 {
-                    for (int cols = 1; cols <= totalColumns; cols++)
+                    for (int cols = totalColumns; cols >= 1; cols--)
                     {
-                        if (String.IsNullOrEmpty(Convert.ToString(ws.Cells[rows, cols].value2)) && cols==getCols)
+                        if(Convert.ToString(ws.Cells[1, cols].value2).Contains("Step"))
                         {
-                            break;
-                        }
-                        else if(String.IsNullOrEmpty(Convert.ToString(ws.Cells[rows, cols].value2)) && cols != getCols)
-                        {
-                            if (Convert.ToString(ws.Cells[1, cols].value2)=="ID")
+                            if(ws.Cells[1, cols].value2.Contains("Expected Result"))
                             {
-                                //Put into dictionary
+                                expResult = evalDataInputLen(expResult, Convert.ToString(ws.Cells[rows, cols].value2));
+                                getTCDetailDic["Step Expected Result"] = expResult;
+                            }
+                            else if(ws.Cells[1, cols].value2.Contains("Title"))
+                            {
+                                stepTitle = evalDataInputLen(stepTitle, Convert.ToString(ws.Cells[rows, cols].value2));
+                                getTCDetailDic["Step Title"] = stepTitle;
+                            }
+                            else if (ws.Cells[1, cols].value2.Contains("No"))
+                            {
+                                stepNo = evalDataInputLen(stepNo, Convert.ToString(ws.Cells[rows, cols].value2));
+                                getTCDetailDic["Step No"] = stepNo;
                             }
                         }
-                        else if (!String.IsNullOrEmpty(Convert.ToString(ws.Cells[rows, cols].value2)) && cols != getCols)
+                        else
                         {
-                        
-                        }                                   
+                            if(Convert.ToString(ws.Cells[rows, getCols].value2) == "1")
+                            {
+                                getTCDetailDic[ws.Cells[1, cols].value2] = Convert.ToString(ws.Cells[rows, cols].value2);
+                            }
+                        }
+                    }
+                    if (Convert.ToString(ws.Cells[rows + 1, getCols].value2) == "1" || 
+                        string.IsNullOrEmpty(Convert.ToString(ws.Cells[rows + 1, getCols].value2)))
+                    {
+                        getDicList.Add(getTCDetailDic);
+                        getTCDetailDic = new Dictionary<string, string>();
+                        expResult = "";
+                        stepTitle = "";
+                        stepNo = "";
                     }
                 }
-
-            }
+                extractedTC = getDicList;
+            }            
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
@@ -602,6 +629,19 @@ namespace TFSUtil.Internals
                 ReleaseExcel(wb, ws, xlApp);
             }
         }
+
+        private string evalDataInputLen(string dataStore, string actData)
+        {            
+            if(dataStore.Length==0)
+            {
+                dataStore = actData;
+            }
+            else
+            {
+                dataStore = dataStore + "<...>" + actData;
+            }
+            return dataStore;
+        }      
 
         public void updateExcelData(string filePath, string wiType, Dictionary<string, string[]> dicUpdData, int valCtr = 0)
         {

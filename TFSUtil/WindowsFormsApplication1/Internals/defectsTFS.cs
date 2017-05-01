@@ -109,7 +109,6 @@ namespace TFSUtil.Internals
 
         private void processCustomListItems(Field dField, List<string> vals)
         {
-
             if (dField.Name == "State")
             {
                 vals.Clear();

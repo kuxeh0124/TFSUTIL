@@ -16,11 +16,15 @@ namespace TFSUtil.Internals
         public Dictionary<string, string> getSuiteList = new Dictionary<string, string>();                       
         public Dictionary<string, string> getTCListFromSuite = new Dictionary<string, string>();
         public Dictionary<string, Dictionary<string,string>> getTCInfo = new Dictionary<string, Dictionary<string, string>>();
-        List<Dictionary<string, string>> getDicList = new List<Dictionary<string, string>>();
-        
+        List<Dictionary<string, string>> getDicList = new List<Dictionary<string, string>>();        
         public List<string> xmlTestCaseFields = new List<string>();
+        public List<string> xmlTestCaseFieldsVal = new List<string>();
         public Dictionary<string, string[]> tcFieldAllowedValues = new Dictionary<string, string[]>();
         static string getSuiteQry = "Select * From TestSuite";
+        static string getPlanQuery = "Select * from TestPlan";
+        IStaticTestSuite currentTestSuite = null;
+        ITestPlan currentTestPlan = null;
+        int currentPlanId = 0;
         public void GetTestSuites(string getSuiteNum="")
         {
             if (getSuiteNum.Length > 0)
@@ -46,7 +50,7 @@ namespace TFSUtil.Internals
                         currentDirectory.Add(getParent.Title);
                     }
                 }
-                if (ts.TestCaseCount > 0)
+                if (ts.TestCases.Count > 0)
                 {
                     string suitePath = "";
                     for (int x = currentDirectory.Count-1; x >= 0; x--)
@@ -154,6 +158,221 @@ namespace TFSUtil.Internals
 
         }
 
+        public void LoadIntoTFS(string getPath)
+        {
+            ExcelProcessing xlProc = new ExcelProcessing();
+            xlProc.readExcelDataForTC(getPath, "Testcase");
+            int getSteps = 0;
+            ITestCase getTc = null;
+            bool isNew = false;
+            foreach (Dictionary<string,string> dicFromListTC in xlProc.extractedTC)
+            {
+                List<string> exp = new List<string>();
+                List<string> title = new List<string>();
+                List<string> stpno = new List<string>();
+                foreach ( KeyValuePair<string,string> entry in dicFromListTC.Reverse())
+                {
+                    switch (Convert.ToString(entry.Key))
+                    {
+                        case "Test Plan":
+                            string getTestPlan = dicFromListTC["Test Plan"].Substring(0, dicFromListTC["Test Plan"].IndexOf(@"\"));
+                            string[] arrTestPlanLoc = dicFromListTC["Test Plan"].Split('\\');
+                            if (!validateTestPlanExist(getTestPlan))
+                            {
+                                createTestPlan(getTestPlan);
+                            }
+                            createTestSuites(arrTestPlanLoc);
+                            break;
+
+                        case "ID":
+                            if (string.IsNullOrEmpty(Convert.ToString(entry.Value)))
+                            {
+                                ITestCase tc = connectTFS.tfsTeamProject.TestCases.Create();
+                                getTc = tc;
+                                isNew = true;
+                            }
+                            else
+                            {
+                                ITestCase tc = connectTFS.tfsTeamProject.TestCases.Find(Convert.ToInt32(entry.Value));
+                                getTc = tc;
+                                getSteps = tc.Actions.Count;
+                                isNew = false;
+                            }                            
+                            break;
+                        case "Step No": case "Step Title": case "Step Expected Result":
+                            if(Convert.ToString(entry.Key).Contains("No"))
+                            {
+                                stpno = getSplitVals(entry.Value);
+                            }
+                            if (Convert.ToString(entry.Key).Contains("Title"))
+                            {
+                                title = getSplitVals(entry.Value);
+                            }
+                            if (Convert.ToString(entry.Key).Contains("Expected Result"))
+                            {
+                                exp = getSplitVals(entry.Value);
+                            }
+                            if(title.Count>0 && exp.Count>0)
+                             {
+                                if (getSteps > stpno.Count)
+                                {
+                                    int getStepDif = getSteps - stpno.Count;
+                                    for (int dif = 1; dif <= getStepDif; dif++)
+                                    {
+                                        getTc.Actions.RemoveAt(dif - 1);
+                                    }
+                                }
+                                else if (getSteps < stpno.Count)
+                                {
+                                    int getStepDif = stpno.Count - getSteps;
+                                    for (int dif = 1; dif <= getStepDif; dif++)
+                                    {
+                                        ITestStep newStep = getTc.CreateTestStep();
+                                        getTc.Actions.Add(newStep);
+                                    }
+                                }
+                                int stind = 0;
+                                foreach (ITestAction testStep in getTc.Actions)
+                                {
+                                    ITestStep ts = (ITestStep)testStep;
+                                    ts.Title = title[stind];
+                                    ts.ExpectedResult = exp[stind];
+                                    stind++;
+                                }
+                            }
+                            break;
+                        case "SNo":
+                            break;
+                        default:
+                            getTc.WorkItem.Fields[Convert.ToString(entry.Key)].Value = Convert.ToString(entry.Value);
+                            break;
+                    }               
+                }
+                if(isNew)
+                {
+                    IdAndName defaultConfigIdAndName = new IdAndName(defConfig.Id, defConfig.Name);
+                    currentTestSuite.SetDefaultConfigurations(new IdAndName[] {defaultConfigIdAndName});
+                    getTc.Save();
+                    currentTestSuite.Entries.Add(getTc);                    
+                    currentTestPlan.Save();
+                }
+                else
+                {
+                    getTc.Save();
+                }
+            }
+        }
+
+        private List<string> getSplitVals(string inputVal)
+        {
+            string[] arrGetVals = inputVal.Split(new string[] { "<...>" }, StringSplitOptions.None);
+            return arrGetVals.ToList();
+        }
+
+        private IStaticTestSuite FindSuite(ITestSuiteEntryCollection collection, string title)
+        {
+            foreach (ITestSuiteEntry entry in collection)
+            {
+                IStaticTestSuite suite = entry.TestSuite as IStaticTestSuite;
+
+                if (suite != null)
+                {
+                    if (suite.Title == title)
+                        return suite;
+                    else if (suite.Entries.Count > 0)
+                        FindSuite(suite.Entries, title);
+                }
+            }
+            return connectTFS.tfsTeamProject.TestSuites.CreateStatic();
+        }
+
+        private void createTestSuites(string[] arrTestPlanLoc)
+        {
+            ITestPlan plan = connectTFS.tfsTeamProject.TestPlans.Find(currentPlanId);
+            currentTestPlan = plan;
+            IStaticTestSuite newSuite = connectTFS.tfsTeamProject.TestSuites.CreateStatic();
+            for (int x = 1; x <= arrTestPlanLoc.Length - 1; x++)
+            {
+                if (x == 1)
+                {
+                    ITestSuiteEntryCollection collection = plan.RootSuite.Entries;
+                    newSuite = FindSuite(collection, arrTestPlanLoc[x]);
+                    newSuite.Title = arrTestPlanLoc[x];
+                    plan.RootSuite.Entries.Add(newSuite);
+                    plan.Save();
+                }
+                else
+                {
+                    ITestSuiteEntryCollection collection = newSuite.Entries;
+                    IStaticTestSuite subSuite = FindSuite(collection, arrTestPlanLoc[x]);
+                    if (subSuite.Id == 0)
+                    {
+                        subSuite.Title = arrTestPlanLoc[x];
+                        newSuite.Entries.Add(subSuite);
+                        newSuite = subSuite;
+                        currentTestSuite = subSuite;
+                        plan.Save();
+                    }
+                    else
+                    {
+                        newSuite = subSuite;
+                        currentTestSuite = subSuite;
+                    }
+                }
+            }
+        }
+        
+        private void createTestPlan(string testPlanName)
+        {
+            ITestPlan plan = connectTFS.tfsTeamProject.TestPlans.Create();
+            plan.Name = testPlanName;
+            plan.StartDate = DateTime.Now;
+            plan.EndDate = DateTime.Now.AddMonths(2);
+            plan.Save();
+            currentPlanId = plan.Id;
+        }
+
+        private bool validateTestPlanExist(string getTestPlan)
+        {
+            bool found = false;
+            if(getTestPlans.Count>0)
+            {
+                foreach(ITestPlan getPlan in getTestPlans)
+                {
+                    if(getPlan.Name== getTestPlan)
+                    {
+                        found = true;
+                        currentPlanId = getPlan.Id;
+                        return true;
+                    }
+                }
+                if (!found)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        private bool validateTestSuiteExist(string tsuite)
+        {
+            getSuiteQry = "Select * from TestSuite where Title='" + tsuite + "'";
+            if (tsCollection.Count > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public void GetTestCases(string suitWkItmId)
         {
             ITestSuiteEntryCollection allTestCase = connectTFS.tfsTeamProject.TestSuites.Find(Convert.ToInt32(suitWkItmId)).TestCases;
@@ -250,6 +469,21 @@ namespace TFSUtil.Internals
             }
         }
 
+        public void loadXMLTCFieldsForValidation()
+        {
+            XDocument xdoc = XDocument.Load(@"References\TestCaseFields.xml");
+            var xRows = from xRow in xdoc.Descendants("Row") select xRow.FirstNode;
+            xmlTestCaseFieldsVal.Add("SNo");
+            xmlTestCaseFieldsVal.Add("ID");
+            foreach (XElement r in xRows)
+            {
+                if (!xmlTestCaseFieldsVal.Contains(r.Value))
+                {
+                    xmlTestCaseFieldsVal.Add(r.Value);
+                }
+            }
+        }
+
         public static WorkItemType testCaseWorkItemType
         {
             get
@@ -265,6 +499,13 @@ namespace TFSUtil.Internals
                 return getTestSuites.Query(getSuiteQry);
             }
         }
+        //public static ITestSuiteEntryCollection tsEntryCollection
+        //{
+        //    get
+        //    {
+        //        return 
+        //    }
+        //}
         public static ITestSuiteHelper getTestSuites
         {
             get
@@ -277,7 +518,20 @@ namespace TFSUtil.Internals
         {
             get
             {
-                return connectTFS.tfsTeamProject.TestPlans.Query("Select * from TestPlan");
+                return connectTFS.tfsTeamProject.TestPlans.Query(getPlanQuery);
+            }
+        }
+
+        public static ITestConfiguration defConfig
+        {
+            get
+            {
+                foreach (ITestConfiguration config in connectTFS.tfsTeamProject.TestConfigurations.Query(
+                    "Select * from TestConfiguration"))
+                {
+                    return config;                    
+                }
+                return defConfig;
             }
         }
     }

@@ -454,14 +454,16 @@ namespace TFSUtil
 
         private void button1_Click(object sender, EventArgs e)
         {
+            testmanTFS tmTfs = new testmanTFS();
+            //For testing purposes
+            //ExcelProcessing xlProc = new ExcelProcessing();
             if (combo_uldl.SelectedItem.ToString() == "Download")
             {            
                 if (list_TCToExtract.Items.Count != 0)
                 {
-
                     if(txt_UploadDownloadTC.Text.Length>0)
                     {
-                        testmanTFS tmTfs = new testmanTFS();
+                        
                         foreach (var item in list_TCToExtract.Items)
                         {
                             string getID = ((KeyValuePair<string, string>)item).Key;
@@ -502,7 +504,16 @@ namespace TFSUtil
             }
             else
             {
-                //Upload here
+                if(txt_UploadDownloadTC.Text.Length>0)
+                {
+                    tmTfs.LoadIntoTFS(txt_UploadDownloadTC.Text);
+                }
+                else
+                {
+                    MessageBox.Show("Please select a file to upload", "No test cases to upload", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                
+                //xlProc.readExcelDataForTC(txt_UploadDownloadTC.Text, "Testcase");
             }
         }
 
