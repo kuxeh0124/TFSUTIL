@@ -96,6 +96,7 @@
             this.switchProjectsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.customFieldConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             newConnectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.defMan.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -738,8 +739,10 @@
             // 
             // editToolStripMenuItem
             // 
+            this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.customFieldConfigToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.editToolStripMenuItem.Text = "Settings";
             // 
             // connectionToolStripMenuItem
@@ -769,6 +772,13 @@
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // customFieldConfigToolStripMenuItem
+            // 
+            this.customFieldConfigToolStripMenuItem.Name = "customFieldConfigToolStripMenuItem";
+            this.customFieldConfigToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.customFieldConfigToolStripMenuItem.Text = "Custom Field Config";
+            this.customFieldConfigToolStripMenuItem.Click += new System.EventHandler(this.customFieldConfigToolStripMenuItem_Click);
             // 
             // TFSUtilUI
             // 
@@ -879,6 +889,7 @@
         private System.Windows.Forms.ComboBox combo_uldl;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox txt_SuiteNumber;
+        private System.Windows.Forms.ToolStripMenuItem customFieldConfigToolStripMenuItem;
     }
 }
 

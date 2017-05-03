@@ -665,5 +665,11 @@ namespace TFSUtil
         {
             //txt_UploadDownloadTC.Text = "";
         }
+
+        private void customFieldConfigToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CustomFieldConfig custField = new CustomFieldConfig();
+            custField.ShowDialog();
+        }
     }
 }

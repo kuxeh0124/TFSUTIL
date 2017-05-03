@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Root xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Row>
+		<TextField1>TextField1</TextField1>
+	</Row>
+	<Row>
+    <TextField2>TextField2</TextField2>
+  </Row>
+  <Row>
+    <TextField3>TextField3</TextField3>
+  </Row>
+  <Row>
+    <TextField4>TextField4</TextField4>
+  </Row>
+  <Row>
+    <Remarks1>Remarks1</Remarks1>
+  </Row>
+  <Row>
+    <Remarks2>Remarks2</Remarks2>
+  </Row>
+  <Row>
+    <Remarks3>Remarks3</Remarks3>
+  </Row>
+  <Row>
+    <Remarks4>Remarks4</Remarks4>
+  </Row>
+</Root>

@@ -10,6 +10,7 @@ using System.IO;
 using HtmlAgilityPack;
 using System.Text.RegularExpressions;
 using System.Drawing;
+using System.Xml.Linq;
 
 namespace TFSUtil.Internals
 {
@@ -23,6 +24,7 @@ namespace TFSUtil.Internals
         public List<int> getAllID = new List<int>();
         public int stepStart = 1;
         public List<Dictionary<string, string>> extractedTC = new List<Dictionary<string, string>>();
+        public Dictionary<string, string> getCustomFields = new Dictionary<string, string>();
 
         public static void ReleaseExcel(excelInterop.Workbook thisWb = null,
                                                          excelInterop.Worksheet thisWs = null,
@@ -169,6 +171,7 @@ namespace TFSUtil.Internals
             string getTotalRows = "9999"; //TODO: This should come from a config file
             int getTotalItems = 0;
             deftfs.getTFSDefectFields();
+            loadCustomXML();
             excelInterop.Application xlApp = new excelInterop.Application();
             excelInterop.Workbook wb = xlApp.Workbooks.Open(outputPath + @"\Templates\" + defTemp + ".xlsx");
             excelInterop.Worksheet ws = (excelInterop.Worksheet)wb.Worksheets[1];
@@ -213,7 +216,14 @@ namespace TFSUtil.Internals
                 ws.Cells[1, 2] = "ID";
                 for (int i = 0; i <= deftfs.xmlDefectFields.Count - 1; i++)
                 {
-                    ws.Cells[1, i + 3].Value2 = deftfs.xmlDefectFields[i];
+                    if (Convert.ToString(deftfs.xmlDefectFields[i]).Contains("Remarks"))
+                    {
+                        ws.Cells[1, i + 3].Value2 = getCustomFields[deftfs.xmlDefectFields[i]];
+                    }
+                    else
+                    {
+                        ws.Cells[1, i + 3].Value2 = deftfs.xmlDefectFields[i];
+                    }                                       
                     ws.Cells[1, i + 3].Columns.AutoFit();
                     if (deftfs.xmlDefectFields[i].Contains("Date"))
                     {
@@ -523,9 +533,10 @@ namespace TFSUtil.Internals
                     for(int y = 2; y<=totalRows; y++)
                     {
                         getKey = ws.Cells[1, x].value2;
+                        //TODO: Add check for remarks field
                         getValue = Convert.ToString(ws.Cells[y, x].value2);                        
                         getValList.Add(getValue);                        
-                    }
+                    }                    
                     dicExData[getKey] = getValList.ToArray();
                 }
             }
@@ -536,6 +547,17 @@ namespace TFSUtil.Internals
             finally
             {
                 ReleaseExcel(wb, ws, xlApp);
+            }
+        }
+
+        public void loadCustomXML()
+        {
+            XDocument xdoc = XDocument.Load(@"References\CustomFields.xml");
+            var xRows = from xRow in xdoc.Descendants("Row") select xRow.FirstNode;
+            getCustomFields.Clear();
+            foreach (XElement r in xRows)
+            {
+                getCustomFields[Convert.ToString(r.Name)] = Convert.ToString(r.Value);
             }
         }
 
@@ -673,6 +695,7 @@ namespace TFSUtil.Internals
                                 }
                                 break;
                             }
+                            //TODO: Add an else if to catch remarks
                             else
                             {
                                 q = 1;

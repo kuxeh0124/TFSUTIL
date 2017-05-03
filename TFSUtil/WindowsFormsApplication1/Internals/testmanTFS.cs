@@ -155,110 +155,124 @@ namespace TFSUtil.Internals
             {
                 return false;
             }
-
         }
 
         public void LoadIntoTFS(string getPath)
         {
             ExcelProcessing xlProc = new ExcelProcessing();
             xlProc.readExcelDataForTC(getPath, "Testcase");
+            loadXMLTCFieldsForValidation();
+            
             int getSteps = 0;
             ITestCase getTc = null;
             bool isNew = false;
-            foreach (Dictionary<string,string> dicFromListTC in xlProc.extractedTC)
+            if(xlProc.validateFileFormat(xmlTestCaseFieldsVal, getPath))
             {
-                List<string> exp = new List<string>();
-                List<string> title = new List<string>();
-                List<string> stpno = new List<string>();
-                foreach ( KeyValuePair<string,string> entry in dicFromListTC.Reverse())
+                foreach (Dictionary<string, string> dicFromListTC in xlProc.extractedTC)
                 {
-                    switch (Convert.ToString(entry.Key))
+                    List<string> exp = new List<string>();
+                    List<string> title = new List<string>();
+                    List<string> stpno = new List<string>();
+                    foreach (KeyValuePair<string, string> entry in dicFromListTC.Reverse())
                     {
-                        case "Test Plan":
-                            string getTestPlan = dicFromListTC["Test Plan"].Substring(0, dicFromListTC["Test Plan"].IndexOf(@"\"));
-                            string[] arrTestPlanLoc = dicFromListTC["Test Plan"].Split('\\');
-                            if (!validateTestPlanExist(getTestPlan))
-                            {
-                                createTestPlan(getTestPlan);
-                            }
-                            createTestSuites(arrTestPlanLoc);
-                            break;
+                        switch (Convert.ToString(entry.Key))
+                        {
+                            case "Test Plan":
+                                string getTestPlan = dicFromListTC["Test Plan"].Substring(0, dicFromListTC["Test Plan"].IndexOf(@"\"));
+                                string[] arrTestPlanLoc = dicFromListTC["Test Plan"].Split('\\');
+                                if (!validateTestPlanExist(getTestPlan))
+                                {
+                                    createTestPlan(getTestPlan);
+                                }
+                                createTestSuites(arrTestPlanLoc);
+                                break;
 
-                        case "ID":
-                            if (string.IsNullOrEmpty(Convert.ToString(entry.Value)))
-                            {
-                                ITestCase tc = connectTFS.tfsTeamProject.TestCases.Create();
-                                getTc = tc;
-                                isNew = true;
-                            }
-                            else
-                            {
-                                ITestCase tc = connectTFS.tfsTeamProject.TestCases.Find(Convert.ToInt32(entry.Value));
-                                getTc = tc;
-                                getSteps = tc.Actions.Count;
-                                isNew = false;
-                            }                            
-                            break;
-                        case "Step No": case "Step Title": case "Step Expected Result":
-                            if(Convert.ToString(entry.Key).Contains("No"))
-                            {
-                                stpno = getSplitVals(entry.Value);
-                            }
-                            if (Convert.ToString(entry.Key).Contains("Title"))
-                            {
-                                title = getSplitVals(entry.Value);
-                            }
-                            if (Convert.ToString(entry.Key).Contains("Expected Result"))
-                            {
-                                exp = getSplitVals(entry.Value);
-                            }
-                            if(title.Count>0 && exp.Count>0)
-                             {
-                                if (getSteps > stpno.Count)
+                            case "ID":
+                                if (string.IsNullOrEmpty(Convert.ToString(entry.Value)))
                                 {
-                                    int getStepDif = getSteps - stpno.Count;
-                                    for (int dif = 1; dif <= getStepDif; dif++)
+                                    ITestCase tc = connectTFS.tfsTeamProject.TestCases.Create();
+                                    getTc = tc;
+                                    isNew = true;
+                                }
+                                else
+                                {
+                                    ITestCase tc = connectTFS.tfsTeamProject.TestCases.Find(Convert.ToInt32(entry.Value));
+                                    getTc = tc;
+                                    getSteps = tc.Actions.Count;
+                                    isNew = false;
+                                }
+                                break;
+                            case "Step No":
+                            case "Step Title":
+                            case "Step Expected Result":
+                                if (Convert.ToString(entry.Key).Contains("No"))
+                                {
+                                    stpno = getSplitVals(entry.Value);
+                                }
+                                if (Convert.ToString(entry.Key).Contains("Title"))
+                                {
+                                    title = getSplitVals(entry.Value);
+                                }
+                                if (Convert.ToString(entry.Key).Contains("Expected Result"))
+                                {
+                                    exp = getSplitVals(entry.Value);
+                                }
+                                if (title.Count > 0 && exp.Count > 0)
+                                {
+                                    if (getSteps > stpno.Count)
                                     {
-                                        getTc.Actions.RemoveAt(dif - 1);
+                                        int getStepDif = getSteps - stpno.Count;
+                                        for (int dif = 1; dif <= getStepDif; dif++)
+                                        {
+                                            getTc.Actions.RemoveAt(dif - 1);
+                                        }
+                                    }
+                                    else if (getSteps < stpno.Count)
+                                    {
+                                        int getStepDif = stpno.Count - getSteps;
+                                        for (int dif = 1; dif <= getStepDif; dif++)
+                                        {
+                                            ITestStep newStep = getTc.CreateTestStep();
+                                            getTc.Actions.Add(newStep);
+                                        }
+                                    }
+                                    int stind = 0;
+                                    foreach (ITestAction testStep in getTc.Actions)
+                                    {
+                                        ITestStep ts = (ITestStep)testStep;
+                                        ts.Title = title[stind];
+                                        ts.ExpectedResult = exp[stind];
+                                        stind++;
                                     }
                                 }
-                                else if (getSteps < stpno.Count)
-                                {
-                                    int getStepDif = stpno.Count - getSteps;
-                                    for (int dif = 1; dif <= getStepDif; dif++)
-                                    {
-                                        ITestStep newStep = getTc.CreateTestStep();
-                                        getTc.Actions.Add(newStep);
-                                    }
-                                }
-                                int stind = 0;
-                                foreach (ITestAction testStep in getTc.Actions)
-                                {
-                                    ITestStep ts = (ITestStep)testStep;
-                                    ts.Title = title[stind];
-                                    ts.ExpectedResult = exp[stind];
-                                    stind++;
-                                }
-                            }
-                            break;
-                        case "SNo":
-                            break;
-                        default:
-                            getTc.WorkItem.Fields[Convert.ToString(entry.Key)].Value = Convert.ToString(entry.Value);
-                            break;
-                    }               
-                }
-                if(isNew)
-                {
-                    IdAndName defaultConfigIdAndName = new IdAndName(defConfig.Id, defConfig.Name);
-                    currentTestSuite.SetDefaultConfigurations(new IdAndName[] {defaultConfigIdAndName});
-                    getTc.Save();
-                    currentTestSuite.Entries.Add(getTc);                    
-                    currentTestPlan.Save();
-                }
-                else
-                {
-                    getTc.Save();
+                                break;
+                            case "SNo":
+                                break;
+                            default:
+                                getTc.WorkItem.Fields[Convert.ToString(entry.Key)].Value = Convert.ToString(entry.Value);
+                                break;
+                        }
+                    }
+                    if (isNew)
+                    {
+                        try
+                        {
+                            IdAndName defaultConfigIdAndName = new IdAndName(defConfig.Id, defConfig.Name);
+                            currentTestSuite.SetDefaultConfigurations(new IdAndName[] { defaultConfigIdAndName });
+                            getTc.Save();
+                            currentTestSuite.Entries.Add(getTc);
+                            currentTestPlan.Save();
+                        }
+                        catch (TestManagementValidationException tme)
+                        {
+                            Console.WriteLine(tme.ToString());
+                            Console.WriteLine(getTc.Title);
+                        }
+                    }
+                    else
+                    {
+                        getTc.Save();
+                    }
                 }
             }
         }
