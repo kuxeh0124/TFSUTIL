@@ -293,6 +293,7 @@ namespace TFSUtil.Internals
             excelInterop.Worksheet ws2 = (excelInterop.Worksheet)wb.Worksheets[2];
             ws.Name = "TestCase";
             ws2.Name = "LOV";
+            loadCustomXML();
             Dictionary<string, double> dicColumnWidth = new Dictionary<string, double>();
             //TODO: this should be changed when gui comes in and select the fields included
 
@@ -331,7 +332,15 @@ namespace TFSUtil.Internals
                 ws.Cells[1, 2] = "ID";
                 for (int i = 0; i <= tmtfs.xmlTestCaseFields.Count - 1; i++)
                 {
-                    ws.Cells[1, i + 3].Value2 = tmtfs.xmlTestCaseFields[i];
+                    if (Convert.ToString(tmtfs.xmlTestCaseFields[i]).Contains("Text Field"))
+                    {
+                        ws.Cells[1, i + 3].Value2 = getCustomFields[tmtfs.xmlTestCaseFields[i].Replace(" ", "")];
+                    }
+                    else
+                    {
+                        ws.Cells[1, i + 3].Value2 = tmtfs.xmlTestCaseFields[i];
+                    }
+                    //ws.Cells[1, i + 3].Value2 = tmtfs.xmlTestCaseFields[i];
                     ws.Cells[1, i + 3].Columns.AutoFit();
                     ws.Cells[2, i + 3].WrapText=true;
                     ws.Cells[2, i + 3].VerticalAlignment = excelInterop.XlVAlign.xlVAlignTop;
@@ -514,6 +523,7 @@ namespace TFSUtil.Internals
             excelInterop.Application xlApp = new excelInterop.Application();
             excelInterop.Workbook wb = xlApp.Workbooks.Open(compDestPath);
             excelInterop.Worksheet ws = (excelInterop.Worksheet)wb.Worksheets[1];
+            loadCustomXML();
             try
             {
                 dicExData.Clear();
@@ -532,8 +542,18 @@ namespace TFSUtil.Internals
                     getValList.Clear();
                     for(int y = 2; y<=totalRows; y++)
                     {
-                        getKey = ws.Cells[1, x].value2;
-                        //TODO: Add check for remarks field
+                        foreach(KeyValuePair<string, string> customFlds in getCustomFields)
+                        {
+                            if (Convert.ToString(ws.Cells[1, x].value2).Contains(customFlds.Value))
+                            {
+                                getKey = customFlds.Key;
+                                break;
+                            }
+                            else
+                            {
+                                getKey = ws.Cells[1, x].value2;
+                            }
+                        }                     
                         getValue = Convert.ToString(ws.Cells[y, x].value2);                        
                         getValList.Add(getValue);                        
                     }                    
@@ -574,6 +594,7 @@ namespace TFSUtil.Internals
             excelInterop.Worksheet ws = (excelInterop.Worksheet)wb.Worksheets[1];
             Dictionary<string, string> getTCDetailDic = new Dictionary<string, string>();
             List<Dictionary<string, string>> getDicList = new List<Dictionary<string, string>>();
+            loadCustomXML();
             try
             {
                 getTCDetailDic.Clear();
@@ -626,7 +647,23 @@ namespace TFSUtil.Internals
                         {
                             if(Convert.ToString(ws.Cells[rows, getCols].value2) == "1")
                             {
-                                getTCDetailDic[ws.Cells[1, cols].value2] = Convert.ToString(ws.Cells[rows, cols].value2);
+                                string myKey = "";
+
+                                myKey = getCustomFields.FirstOrDefault(x => x.Value == ws.Cells[1, cols].value2).Key;
+                                if (string.IsNullOrEmpty(myKey))
+                                {
+                                    myKey = Convert.ToString(ws.Cells[1, cols].value2);
+                                }                                                    
+                                else
+                                {
+                                    if (myKey.Contains("TextField") && myKey.Length==10)
+                                    {
+                                        myKey = myKey.Substring(myKey.IndexOf("Text"), 4) + " " +
+                                                myKey.Substring(myKey.IndexOf("Field"), 5) + " " +
+                                                myKey.Substring(9, 1);
+                                    }
+                                }
+                                getTCDetailDic[myKey] = Convert.ToString(ws.Cells[rows, cols].value2);
                             }
                         }
                     }
@@ -674,7 +711,7 @@ namespace TFSUtil.Internals
             excelInterop.Application xlApp = new excelInterop.Application();
             excelInterop.Workbook wb = xlApp.Workbooks.Open(compDestPath);
             excelInterop.Worksheet ws = (excelInterop.Worksheet)wb.Worksheets[1];
-
+            loadCustomXML();
             try
             {
                 for (int i = valCtr; i <= getTotalData; i++)
@@ -694,6 +731,20 @@ namespace TFSUtil.Internals
                                     q = 1;
                                 }
                                 break;
+                            }
+                            else if(updData.Key.Contains("Remarks"))
+                            {
+                                if(ws.Cells[1, d].value2 == getCustomFields[updData.Key])
+                                {
+                                    ws.Cells[i + 2, d].value2 = HtmlToText.ConvertHtml(checkNull(Convert.ToString(updData.Value[i])));
+                                    //ws.Cells[i + 2, d].value2 = updData.Value[i];
+                                    q = d + 1;
+                                    if (q > dicUpdData.Count())
+                                    {
+                                        q = 1;
+                                    }
+                                    break;
+                                }
                             }
                             //TODO: Add an else if to catch remarks
                             else
@@ -742,7 +793,7 @@ namespace TFSUtil.Internals
                     foreach (KeyValuePair<string,string> getInfo in entry.Value)
                     {
                         if(getInfo.Key!= "getSteps")
-                        {
+                        {                            
                             ws.Cells[getInitialRow, ctrColumn].value2 = HtmlToText.ConvertHtml(checkNull(Convert.ToString(getInfo.Value)));
                             ctrColumn++;
                         }
@@ -1009,18 +1060,43 @@ namespace TFSUtil.Internals
         public bool validateFileFormat(List<string> fieldsToUpload, string fileToUpload)
         {
             bool retval = false;
+            bool matchFound = false;
             List<string> getCols = new List<string>();
+            loadCustomXML();
+            excelInterop.Application xlApp = new excelInterop.Application();
+            excelInterop.Workbook wb = xlApp.Workbooks.Open(fileToUpload);
+            excelInterop.Sheets sheets = wb.Worksheets;
+            excelInterop.Worksheet ws = sheets[1];
             try
             {
-                excelInterop.Application xlApp = new excelInterop.Application();
-                excelInterop.Workbook wb = xlApp.Workbooks.Open(fileToUpload);
-                excelInterop.Sheets sheets = wb.Worksheets;
-                excelInterop.Worksheet ws = sheets[1];
                 for(int i=1; i<=9999; i++)
                 {
                     if (!String.IsNullOrEmpty(Convert.ToString(ws.Cells[1, i].value2)))
                     {
-                        getCols.Add(ws.Cells[1, i].value2);
+                        matchFound = false;
+                        foreach (KeyValuePair<string,string> customFlds in getCustomFields)
+                        {
+                            if (Convert.ToString(ws.Cells[1, i].value2).Contains(customFlds.Value))
+                            {
+                                if(customFlds.Key.Contains("TextField") && customFlds.Key.Length == 10)
+                                {
+                                    string newKey = customFlds.Key.Substring(customFlds.Key.IndexOf("Text"), 4) + " " +
+                                                        customFlds.Key.Substring(customFlds.Key.IndexOf("Field"), 5) + " " +
+                                                        customFlds.Key.Substring(9,1);
+                                    getCols.Add(newKey);
+                                }
+                                else
+                                {
+                                    getCols.Add(customFlds.Key);
+                                }                               
+                                matchFound = true;
+                                break;
+                            }
+                        }
+                        if(!matchFound)
+                        {
+                            getCols.Add(ws.Cells[1, i].value2);                           
+                        }
                     }
                     else
                     {
@@ -1044,11 +1120,11 @@ namespace TFSUtil.Internals
             }
             catch (ArgumentOutOfRangeException)
             {
-                
+                ReleaseExcel(wb, ws, xlApp);
             }
             finally
             {
-                
+                ReleaseExcel(wb, ws, xlApp);
             }
             return retval;
         }
