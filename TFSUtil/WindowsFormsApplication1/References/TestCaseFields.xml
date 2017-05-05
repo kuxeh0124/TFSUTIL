@@ -81,6 +81,14 @@
 		<Displayed>No - But will be added in template</Displayed>
 	</Row>
   <Row>
+    <Field>Test Outcome</Field>
+    <Displayed>No - But will be added in template</Displayed>
+  </Row>
+  <Row>
+    <Field>Date Completed</Field>
+    <Displayed>No - But will be added in template</Displayed>
+  </Row>
+  <Row>
     <Field>Step No</Field>
     <Displayed>Yes</Displayed>
   </Row>
@@ -91,5 +99,5 @@
   <Row>
     <Field>Step Expected Result</Field>
     <Displayed>Yes</Displayed>
-  </Row>  
+  </Row>
 </Root>

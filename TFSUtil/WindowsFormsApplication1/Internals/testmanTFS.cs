@@ -69,6 +69,7 @@ namespace TFSUtil.Internals
 
             ITestCase testCase = connectTFS.tfsTeamProject.TestCases.Find(Convert.ToInt32(tcID));
             Dictionary<string, string> getTCFields = new Dictionary<string, string>();
+            var testcaseResult = connectTFS.tfsTeamProject.TestResults.Query("Select * from TestResult where TestCaseID='" + tcID + "'");
             try
             {                
                 foreach (string getField in xmlTestCaseFields)
@@ -86,6 +87,18 @@ namespace TFSUtil.Internals
             {
                 int stepCtr = 1;
                 string fullStep = "";
+                string dc="";
+                string oc="";
+                if (stepCtr == 1)
+                {
+                    if (testcaseResult.Count > 0)
+                    {
+                        dc = testcaseResult[testcaseResult.Count - 1].DateCompleted.ToString();
+                        oc = testcaseResult[testcaseResult.Count - 1].Outcome.ToString();
+                    }
+                    getTCFields.Add("Test Outcome", oc);
+                    getTCFields.Add("Date Completed", dc);                    
+                }
                 foreach (ITestAction testStep in testCase.Actions)
                 {                   
                     ITestStep ts = (ITestStep)testStep;
@@ -247,6 +260,8 @@ namespace TFSUtil.Internals
                                 }
                                 break;
                             case "SNo":
+                            case "Test Outcome":
+                            case "Date Completed":
                                 break;
                             default:
                                 getTc.WorkItem.Fields[Convert.ToString(entry.Key)].Value = Convert.ToString(entry.Value);
