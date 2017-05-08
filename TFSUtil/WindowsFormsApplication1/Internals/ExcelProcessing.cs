@@ -25,6 +25,7 @@ namespace TFSUtil.Internals
         public int stepStart = 1;
         public List<Dictionary<string, string>> extractedTC = new List<Dictionary<string, string>>();
         public Dictionary<string, string> getCustomFields = new Dictionary<string, string>();
+        public List<int> rowTestId = new List<int>();
 
         public static void ReleaseExcel(excelInterop.Workbook thisWb = null,
                                                          excelInterop.Worksheet thisWs = null,
@@ -598,6 +599,7 @@ namespace TFSUtil.Internals
             try
             {
                 getTCDetailDic.Clear();
+                rowTestId = new List<int>();
                 int totalColumns = ws.UsedRange.Columns.Count;
                 int totalRows = 0;
                 int getCols = 0;
@@ -648,6 +650,10 @@ namespace TFSUtil.Internals
                             if(Convert.ToString(ws.Cells[rows, getCols].value2) == "1")
                             {
                                 string myKey = "";
+                                if(ws.Cells[1, cols].value2 == "ID")
+                                {
+                                    rowTestId.Add(rows);
+                                }
 
                                 myKey = getCustomFields.FirstOrDefault(x => x.Value == ws.Cells[1, cols].value2).Key;
                                 if (string.IsNullOrEmpty(myKey))
@@ -858,6 +864,28 @@ namespace TFSUtil.Internals
             finally
             {
                 wb.Save();
+                ReleaseExcel(wb, ws, xlApp);
+            }
+        }
+
+        public void updateTestCaseTestID(string fileName, int tcID, int getRow)
+        {
+            excelInterop.Application xlApp = new excelInterop.Application();
+            excelInterop.Workbook wb = xlApp.Workbooks.Open(fileName);
+            excelInterop.Worksheet ws = (excelInterop.Worksheet)wb.Worksheets[1];
+            try
+            {
+                ws.Cells[getRow, 2].value2 = tcID;
+                wb.Save();
+                wb.Saved = true;               
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                ReleaseExcel(wb, ws, xlApp);
+            }
+            finally
+            {
                 ReleaseExcel(wb, ws, xlApp);
             }
         }

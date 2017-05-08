@@ -179,6 +179,7 @@ namespace TFSUtil.Internals
             int getSteps = 0;
             ITestCase getTc = null;
             bool isNew = false;
+            int getExtract = 0;
             if(xlProc.validateFileFormat(xmlTestCaseFieldsVal, getPath))
             {
                 foreach (Dictionary<string, string> dicFromListTC in xlProc.extractedTC)
@@ -277,6 +278,7 @@ namespace TFSUtil.Internals
                             getTc.Save();
                             currentTestSuite.Entries.Add(getTc);
                             currentTestPlan.Save();
+                            xlProc.updateTestCaseTestID(getPath, getTc.Id, xlProc.rowTestId[getExtract]);
                         }
                         catch (TestManagementValidationException tme)
                         {
@@ -288,6 +290,7 @@ namespace TFSUtil.Internals
                     {
                         getTc.Save();
                     }
+                    getExtract++;
                 }
             }
         }

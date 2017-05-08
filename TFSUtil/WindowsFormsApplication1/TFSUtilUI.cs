@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using TFSUtil.Internals;
 using System.IO;
 using excelInterop = Microsoft.Office.Interop.Excel;
+using System.Threading;
 
 namespace TFSUtil
 {
@@ -18,9 +19,10 @@ namespace TFSUtil
         bool isConnected = false;
         bool isExtactAll = false;
         Dictionary<string, string> dicTCToExtract = new Dictionary<string, string>();
+
         public TFSUtilUI()
         {
-            InitializeComponent();
+            InitializeComponent();            
         }
 
         private void newConnectionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -197,6 +199,28 @@ namespace TFSUtil
 
         private void btn_ExtractDefects_Click(object sender, EventArgs e)
         {
+            ProcessExtract();            
+        }
+        
+        private void myWaitForm()
+        {
+            Form waitForm = new Form();
+            waitForm.ControlBox = false;
+            waitForm.Size = new Size(200, 80);
+
+            Label waitLabel = new Label();
+            waitLabel.Text = "TESTING";
+            waitForm.Controls.Add(waitLabel);
+            StartPosition = FormStartPosition.CenterScreen;
+            waitForm.ShowDialog();
+        }
+
+        void ProcessExtract()
+        {
+            Thread getThread = new Thread(myWaitForm);
+            getThread.Start();
+            bool getFalse = false;
+            int i = 0;
             try
             {
                 defectsTFS defTfs = new defectsTFS();
@@ -227,27 +251,36 @@ namespace TFSUtil
                     {
                         wiql = defectsTFS.queryValue[combo_MyQuery.SelectedValue.ToString()];
                     }
-                    if(defTfs.extractInformationFromDefect(wiql, txt_extractDirectoryPath.Text.ToString(), 
-                        getComboData.ToArray(), getComboValue.ToArray()))
+                    getFalse = defTfs.extractInformationFromDefect(wiql, txt_extractDirectoryPath.Text.ToString(),
+                        getComboData.ToArray(), getComboValue.ToArray());
+                    if (getFalse)
                     {
+                        getThread.Abort();
                         MessageBox.Show("Extract completed!");
                     }
                     else
                     {
+                        getThread.Abort();
                         MessageBox.Show("There was a problem with the extraction.");
                     }
                 }
                 else
                 {
+                    getThread.Abort();
                     MessageBox.Show("Please specify and extract file location", "Missing File Location", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception err)
             {
+                getThread.Abort();
                 MessageBox.Show("Extract failed due to:");
             }
         }
-
+        void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            // The progress percentage is a property of e
+            extractProgess.Value = e.ProgressPercentage;
+        }
         private void btn_BroweUpload_Click(object sender, EventArgs e)
         {
             int size = -1;

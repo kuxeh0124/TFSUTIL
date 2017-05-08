@@ -97,6 +97,8 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.customFieldConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.extractProgess = new System.Windows.Forms.ProgressBar();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             newConnectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.defMan.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -131,6 +133,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.extractProgess);
             this.tabPage2.Controls.Add(this.groupBox3);
             this.tabPage2.Controls.Add(this.statusStrip1);
             this.tabPage2.Controls.Add(this.groupBox2);
@@ -726,7 +729,7 @@
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
             // settingsToolStripMenuItem
@@ -779,6 +782,13 @@
             this.customFieldConfigToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.customFieldConfigToolStripMenuItem.Text = "Custom Field Config";
             this.customFieldConfigToolStripMenuItem.Click += new System.EventHandler(this.customFieldConfigToolStripMenuItem_Click);
+            // 
+            // extractProgess
+            // 
+            this.extractProgess.Location = new System.Drawing.Point(397, 306);
+            this.extractProgess.Name = "extractProgess";
+            this.extractProgess.Size = new System.Drawing.Size(100, 14);
+            this.extractProgess.TabIndex = 14;
             // 
             // TFSUtilUI
             // 
@@ -890,6 +900,8 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox txt_SuiteNumber;
         private System.Windows.Forms.ToolStripMenuItem customFieldConfigToolStripMenuItem;
+        private System.Windows.Forms.ProgressBar extractProgess;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
 
