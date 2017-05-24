@@ -6,95 +6,79 @@
   </Row>  
 	<Row>
 		<Field>Title</Field>
-		<Displayed>Y</Displayed>
-	</Row>
-	<Row>
-		<Field>Assigned To</Field>
-		<Displayed>Y</Displayed>
+		<Displayed>Yes</Displayed>
 	</Row>
 	<Row>
 		<Field>State</Field>
-		<Displayed>Y</Displayed>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Assigned To</Field>
+		<Displayed>Yes</Displayed>
 	</Row>
 	<Row>
 		<Field>Priority</Field>
-		<Displayed>Y</Displayed>
+		<Displayed>Yes</Displayed>
 	</Row>
 	<Row>
 		<Field>Automation status</Field>
-		<Displayed>Y</Displayed>
-	</Row>
-	<Row>
-		<Field>Validity</Field>
-		<Displayed>Y</Displayed>
-	</Row>
-	<Row>
-		<Field>Baseline Number</Field>
-		<Displayed>Y</Displayed>
-	</Row>
-	<Row>
-		<Field>Release Number</Field>
-		<Displayed>Y</Displayed>
-	</Row>
-	<Row>
-		<Field>Old Release Number</Field>
-		<Displayed>Y</Displayed>
-	</Row>
-	<Row>
-		<Field>Area Path</Field>
-		<Displayed>Y</Displayed>
-	</Row>
-	<Row>
-		<Field>Iteration Path</Field>
-		<Displayed>Y</Displayed>
-	</Row>
-	<Row>
-		<Field>Test Type</Field>
-		<Displayed>Y</Displayed>
+		<Displayed>Yes</Displayed>
 	</Row>
 	<Row>
 		<Field>Test Case ID</Field>
-		<Displayed>Y</Displayed>
+		<Displayed>Yes</Displayed>
 	</Row>
 	<Row>
-		<Field>Test Category</Field>
-		<Displayed>Y</Displayed>
+		<Field>Area Path</Field>
+		<Displayed>Yes</Displayed>
 	</Row>
 	<Row>
-		<Field>Module</Field>
-		<Displayed>Y</Displayed>
+		<Field>Iteration Path</Field>
+		<Displayed>Yes</Displayed>
 	</Row>
 	<Row>
 		<Field>Text Field 1</Field>
-		<Displayed>Y</Displayed>
+		<Displayed>Yes</Displayed>
 	</Row>
 	<Row>
 		<Field>Text Field 2</Field>
-		<Displayed>Y</Displayed>
+		<Displayed>Yes</Displayed>
 	</Row>
-		<Row>
-		<Field>Test Scenario</Field>
-		<Displayed>Y</Displayed>
+	<Row>
+		<Field>Text Field 3</Field>
+		<Displayed>Yes</Displayed>
 	</Row>
-		<Row>
+	<Row>
+		<Field>Text Field 4</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Description</Field>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
 		<Field>Pre-Condition</Field>
-		<Displayed>Y</Displayed>
+		<Displayed>Yes</Displayed>
 	</Row>
-		<Row>
-		<Field>Input Data</Field>
-		<Displayed>Y</Displayed>
+	<Row>
+		<Field>History</Field>
+		<Displayed>Yes</Displayed>
 	</Row>
 	<Row>
 		<Field>Automated Test Name</Field>
-		<Displayed>Y</Displayed>
+		<Displayed>Yes</Displayed>
 	</Row>
 	<Row>
 		<Field>Automated Test Storage</Field>
-		<Displayed>Y</Displayed>
+		<Displayed>Yes</Displayed>
 	</Row>
 	<Row>
 		<Field>Automated Test Type</Field>
-		<Displayed>Y</Displayed>
+		<Displayed>Yes</Displayed>
+	</Row>
+	<Row>
+		<Field>Parameters</Field>
+		<Displayed>No - But will be added in template</Displayed>
 	</Row>
   <Row>
     <Field>Test Outcome</Field>
@@ -115,5 +99,5 @@
   <Row>
     <Field>Step Expected Result</Field>
     <Displayed>Yes</Displayed>
-  </Row>	
+  </Row>
 </Root>

@@ -238,7 +238,10 @@ namespace TFSUtil.Internals
                                         int getStepDif = getSteps - stpno.Count;
                                         for (int dif = 1; dif <= getStepDif; dif++)
                                         {
-                                            getTc.Actions.RemoveAt(dif - 1);
+                                            if(dif - 1 == 0)
+                                            {
+                                                getTc.Actions.RemoveAt(dif - 1);
+                                            }                                            
                                         }
                                     }
                                     else if (getSteps < stpno.Count)
@@ -423,6 +426,7 @@ namespace TFSUtil.Internals
 
             foreach (Field dField in workItem.Fields)
             {
+                Console.WriteLine(dField.Name);
                 allowedVals.Clear();
                 if (xmlTestCaseFields.Contains(dField.Name))
                 {
