@@ -238,10 +238,7 @@ namespace TFSUtil.Internals
                                         int getStepDif = getSteps - stpno.Count;
                                         for (int dif = 1; dif <= getStepDif; dif++)
                                         {
-                                            if(dif - 1 == 0)
-                                            {
-                                                getTc.Actions.RemoveAt(dif - 1);
-                                            }                                            
+                                            getTc.Actions.RemoveAt(dif);                        
                                         }
                                     }
                                     else if (getSteps < stpno.Count)

@@ -963,7 +963,7 @@ namespace TFSUtil.Internals
             lblPreparedBy.Font.Name = "Times New Roman";
             lblPreparedBy.Font.Size = "12";
             lblPreparedBy.Font.Bold = true;
-            valPreparedBy.Value = "CrimsonLogic / "; //+ getValues[8];
+            valPreparedBy.Value = "CrimsonLogic / " + getDic["Date Completed"];
             valPreparedBy.Font.Name = "Arial";
             valPreparedBy.Font.Size = "10";
             valPreparedBy.WrapText = true;
@@ -975,7 +975,7 @@ namespace TFSUtil.Internals
             lblTestedBy.Font.Name = "Times New Roman";
             lblTestedBy.Font.Size = "12";
             lblTestedBy.Font.Bold = true;
-            valTestedBy.Value = "CrimsonLogic / ";// + getValues[6];
+            valTestedBy.Value = "CrimsonLogic / " + getDic["Date Completed"];
             valTestedBy.Font.Name = "Arial";
             valTestedBy.Font.Size = "10";
             valTestedBy.WrapText = true;
@@ -1045,15 +1045,15 @@ namespace TFSUtil.Internals
                 ws.get_Range("B" + x, "C" + x).Merge();
                 ws.get_Range("B" + x).Value = stepTitle;
                 ws.get_Range("E" + x).Value = stepExp;
-                //if (actRes[i] == "Passed")
-                //{
-                //    ws.get_Range("F" + x).Value = "Actual result is as per expected";
-                //}
-                //else
-                //{
-                //    ws.get_Range("F" + x).Value = actRes[i];
-                //}
-                //ws.get_Range("G" + x).Value = actRes[i];
+                if (getDic["Test Outcome"] == "Passed")
+                {
+                    ws.get_Range("F" + x).Value = "Actual result is as per expected";
+                }
+                else
+                {
+                    ws.get_Range("F" + x).Value = getDic["Test Outcome"];
+                }
+                ws.get_Range("G" + x).Value = getDic["Test Outcome"];
                 ws.get_Range("A" + x, "G" + x).Font.Name = "Arial";
                 ws.get_Range("A" + x, "G" + x).Font.Size = "10";
                 getRowHeight = ((getLen / rowRatio) * multiPlier);
