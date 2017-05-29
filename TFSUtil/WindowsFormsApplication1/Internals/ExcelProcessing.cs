@@ -26,6 +26,7 @@ namespace TFSUtil.Internals
         public List<Dictionary<string, string>> extractedTC = new List<Dictionary<string, string>>();
         public Dictionary<string, string> getCustomFields = new Dictionary<string, string>();
         public List<int> rowTestId = new List<int>();
+        public List<string> rtmHeaders = new List<string>();
 
         public static void ReleaseExcel(excelInterop.Workbook thisWb = null,
                                                          excelInterop.Worksheet thisWs = null,
@@ -1084,6 +1085,44 @@ namespace TFSUtil.Internals
                 return input;
             }
             
+        }
+
+        public void loadRTMExcelFileHeaders(int headerRow, int headerCol, string fileName)
+        {
+            //string fileName = filePath.Substring(filePath.LastIndexOf("\\"));
+            //string compDestPath = destPath + wiType + fileName;
+            //int getTotalData = dicUpdData.Count() - 1;            
+            excelInterop.Application xlApp = new excelInterop.Application();
+            excelInterop.Workbook wb = xlApp.Workbooks.Open(fileName);
+            excelInterop.Worksheet ws = (excelInterop.Worksheet)wb.Worksheets[1];
+
+            try
+            {
+                for(int x=headerCol; x<=9999; x++)
+                {
+
+                    if (ws.Cells[headerRow, x].value == null)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        rtmHeaders.Add(ws.Cells[headerRow, x].value);
+                    }
+                }                
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                wb.Saved = true;
+                wb.Save();
+                ReleaseExcel(wb, ws, xlApp);
+            }
+            finally
+            {
+                wb.Save();
+                ReleaseExcel(wb, ws, xlApp);
+            }
         }
         public bool validateFileFormat(List<string> fieldsToUpload, string fileToUpload)
         {

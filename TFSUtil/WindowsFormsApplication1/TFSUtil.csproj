@@ -64,6 +64,7 @@
     <Compile Include="CustomFieldConfig.Designer.cs">
       <DependentUpon>CustomFieldConfig.cs</DependentUpon>
     </Compile>
+    <Compile Include="Internals\rtmTFS.cs" />
     <Compile Include="Internals\testmanTFS.cs" />
     <Compile Include="TFSUtilUI.cs">
       <SubType>Form</SubType>

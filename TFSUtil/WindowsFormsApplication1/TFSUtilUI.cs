@@ -704,5 +704,72 @@ namespace TFSUtil
             CustomFieldConfig custField = new CustomFieldConfig();
             custField.ShowDialog();
         }
+
+        private void loadRequirements_Click(object sender, EventArgs e)
+        {
+            rtmTFS rtm = new rtmTFS();
+            int totalRow = MappingTableDataGrid.Rows.Count-1;
+            for(int x=0; x<=totalRow; x++)
+            {
+                rtm.getRTMMappedFields[Convert.ToString(MappingTableDataGrid.Rows[x].Cells[0].Value)]
+                    = Convert.ToString(MappingTableDataGrid.Rows[x].Cells[1]);
+            }
+            rtm.loadRequirements();
+        }
+
+        private void browseRtmTemplate_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog fldg = openFileDialog1;
+            fldg.Filter = "Excel Files|*.xls;*.xlsx;*.xlsm"; ;
+            DialogResult result = fldg.ShowDialog();
+            if (result == DialogResult.OK) // Test result.
+            {
+                try
+                {
+                    string file = openFileDialog1.FileName;
+                    txt_rtmTemplate.Text = file;
+                    Globals.testCaseFileName = file;
+                }
+                catch (IOException)
+                {
+                }
+            }
+        }
+
+        private void loadTemplate_Click(object sender, EventArgs e)
+        {
+            //MappingTableDataGrid.AutoGenerateColumns = false;            
+            ExcelProcessing xlProc = new ExcelProcessing();
+            rtmTFS rtm = new rtmTFS();
+
+            xlProc.loadRTMExcelFileHeaders(Convert.ToInt32(txt_StartHeaderRow.Text), 
+                Convert.ToInt32(txt_StartHeaderCol.Text), txt_rtmTemplate.Text);
+            rtm.loadRTMFields();
+            DataTable dt = new DataTable();
+            dt.Columns.Add("TemplateField", typeof(string));
+            dt.Columns.Add("MappingField", typeof(string));
+            for (int x = 0; x <= xlProc.rtmHeaders.Count - 1; x++)
+            {
+                dt.Rows.Add(new string[] { xlProc.rtmHeaders[x], "Ignore" });
+            }
+
+            DataGridViewComboBoxColumn mf = new DataGridViewComboBoxColumn();
+            var list11 = rtm.getRTMFields;
+            mf.DataSource = list11;
+            mf.HeaderText = "MappingField";
+            mf.DataPropertyName = "MappingField";
+            mf.Width = 230;
+            mf.FlatStyle = FlatStyle.Flat; 
+
+            DataGridViewTextBoxColumn tf = new DataGridViewTextBoxColumn();
+            tf.HeaderText = "TemplateField";
+            tf.DataPropertyName = "TemplateField";
+            tf.ReadOnly = true;
+            tf.Width = 230;
+
+            MappingTableDataGrid.Columns.Add(tf);
+            MappingTableDataGrid.Columns.Add(mf);
+            MappingTableDataGrid.DataSource = dt;
+        }
     }
 }

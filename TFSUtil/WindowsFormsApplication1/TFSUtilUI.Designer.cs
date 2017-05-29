@@ -31,6 +31,7 @@
             System.Windows.Forms.ToolStripMenuItem newConnectionToolStripMenuItem;
             this.defMan = new System.Windows.Forms.TabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.extractProgess = new System.Windows.Forms.ProgressBar();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.cb_extractAll = new System.Windows.Forms.CheckBox();
             this.cb_Query = new System.Windows.Forms.CheckBox();
@@ -86,19 +87,31 @@
             this.combo_TestSuites = new System.Windows.Forms.ComboBox();
             this.statusStrip2 = new System.Windows.Forms.StatusStrip();
             this.statusLbl_ConnectionTM = new System.Windows.Forms.ToolStripStatusLabel();
+            this.rtmTab = new System.Windows.Forms.TabPage();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.loadTemplate = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
+            this.txt_StartHeaderRow = new System.Windows.Forms.TextBox();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.browseRtmTemplate = new System.Windows.Forms.Button();
+            this.txt_rtmTemplate = new System.Windows.Forms.TextBox();
+            this.loadRequirements = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.customFieldConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.connectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.connectToTFSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.switchProjectsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.customFieldConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.extractProgess = new System.Windows.Forms.ProgressBar();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.printDocument1 = new System.Drawing.Printing.PrintDocument();
+            this.label9 = new System.Windows.Forms.Label();
+            this.txt_StartHeaderCol = new System.Windows.Forms.TextBox();
+            this.MappingTableDataGrid = new System.Windows.Forms.DataGridView();
             newConnectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.defMan.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -111,7 +124,11 @@
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.statusStrip2.SuspendLayout();
+            this.rtmTab.SuspendLayout();
+            this.groupBox8.SuspendLayout();
+            this.groupBox7.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MappingTableDataGrid)).BeginInit();
             this.SuspendLayout();
             // 
             // newConnectionToolStripMenuItem
@@ -125,6 +142,7 @@
             // 
             this.defMan.Controls.Add(this.tabPage2);
             this.defMan.Controls.Add(this.tabPage1);
+            this.defMan.Controls.Add(this.rtmTab);
             this.defMan.Location = new System.Drawing.Point(0, 27);
             this.defMan.Name = "defMan";
             this.defMan.SelectedIndex = 0;
@@ -145,6 +163,13 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Defect Management";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // extractProgess
+            // 
+            this.extractProgess.Location = new System.Drawing.Point(397, 306);
+            this.extractProgess.Name = "extractProgess";
+            this.extractProgess.Size = new System.Drawing.Size(100, 14);
+            this.extractProgess.TabIndex = 14;
             // 
             // groupBox3
             // 
@@ -706,6 +731,97 @@
             this.statusLbl_ConnectionTM.Size = new System.Drawing.Size(88, 17);
             this.statusLbl_ConnectionTM.Text = "Not Connected";
             // 
+            // rtmTab
+            // 
+            this.rtmTab.Controls.Add(this.groupBox8);
+            this.rtmTab.Controls.Add(this.groupBox7);
+            this.rtmTab.Controls.Add(this.loadRequirements);
+            this.rtmTab.Location = new System.Drawing.Point(4, 22);
+            this.rtmTab.Name = "rtmTab";
+            this.rtmTab.Size = new System.Drawing.Size(527, 326);
+            this.rtmTab.TabIndex = 2;
+            this.rtmTab.Text = "Requirements Matrix";
+            this.rtmTab.UseVisualStyleBackColor = true;
+            // 
+            // groupBox8
+            // 
+            this.groupBox8.Controls.Add(this.MappingTableDataGrid);
+            this.groupBox8.Controls.Add(this.txt_StartHeaderCol);
+            this.groupBox8.Controls.Add(this.label9);
+            this.groupBox8.Controls.Add(this.loadTemplate);
+            this.groupBox8.Controls.Add(this.label8);
+            this.groupBox8.Controls.Add(this.txt_StartHeaderRow);
+            this.groupBox8.Location = new System.Drawing.Point(8, 96);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(510, 188);
+            this.groupBox8.TabIndex = 2;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "Map Fields";
+            // 
+            // loadTemplate
+            // 
+            this.loadTemplate.Location = new System.Drawing.Point(311, 15);
+            this.loadTemplate.Name = "loadTemplate";
+            this.loadTemplate.Size = new System.Drawing.Size(75, 23);
+            this.loadTemplate.TabIndex = 3;
+            this.loadTemplate.Text = "Load File";
+            this.loadTemplate.UseVisualStyleBackColor = true;
+            this.loadTemplate.Click += new System.EventHandler(this.loadTemplate_Click);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(8, 20);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(92, 13);
+            this.label8.TabIndex = 5;
+            this.label8.Text = "Start Header Row";
+            // 
+            // txt_StartHeaderRow
+            // 
+            this.txt_StartHeaderRow.Location = new System.Drawing.Point(106, 17);
+            this.txt_StartHeaderRow.Name = "txt_StartHeaderRow";
+            this.txt_StartHeaderRow.Size = new System.Drawing.Size(41, 20);
+            this.txt_StartHeaderRow.TabIndex = 4;
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.browseRtmTemplate);
+            this.groupBox7.Controls.Add(this.txt_rtmTemplate);
+            this.groupBox7.Location = new System.Drawing.Point(9, 4);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(510, 86);
+            this.groupBox7.TabIndex = 1;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "Browse Template";
+            // 
+            // browseRtmTemplate
+            // 
+            this.browseRtmTemplate.Location = new System.Drawing.Point(7, 46);
+            this.browseRtmTemplate.Name = "browseRtmTemplate";
+            this.browseRtmTemplate.Size = new System.Drawing.Size(75, 23);
+            this.browseRtmTemplate.TabIndex = 2;
+            this.browseRtmTemplate.Text = "Browse";
+            this.browseRtmTemplate.UseVisualStyleBackColor = true;
+            this.browseRtmTemplate.Click += new System.EventHandler(this.browseRtmTemplate_Click);
+            // 
+            // txt_rtmTemplate
+            // 
+            this.txt_rtmTemplate.Location = new System.Drawing.Point(7, 20);
+            this.txt_rtmTemplate.Name = "txt_rtmTemplate";
+            this.txt_rtmTemplate.Size = new System.Drawing.Size(497, 20);
+            this.txt_rtmTemplate.TabIndex = 0;
+            // 
+            // loadRequirements
+            // 
+            this.loadRequirements.Location = new System.Drawing.Point(434, 290);
+            this.loadRequirements.Name = "loadRequirements";
+            this.loadRequirements.Size = new System.Drawing.Size(75, 23);
+            this.loadRequirements.TabIndex = 0;
+            this.loadRequirements.Text = "Generate";
+            this.loadRequirements.UseVisualStyleBackColor = true;
+            this.loadRequirements.Click += new System.EventHandler(this.loadRequirements_Click);
+            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -729,7 +845,7 @@
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
             // settingsToolStripMenuItem
@@ -745,8 +861,15 @@
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.customFieldConfigToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.editToolStripMenuItem.Text = "Settings";
+            // 
+            // customFieldConfigToolStripMenuItem
+            // 
+            this.customFieldConfigToolStripMenuItem.Name = "customFieldConfigToolStripMenuItem";
+            this.customFieldConfigToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.customFieldConfigToolStripMenuItem.Text = "Custom Field Config";
+            this.customFieldConfigToolStripMenuItem.Click += new System.EventHandler(this.customFieldConfigToolStripMenuItem_Click);
             // 
             // connectionToolStripMenuItem
             // 
@@ -776,19 +899,39 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // customFieldConfigToolStripMenuItem
+            // label9
             // 
-            this.customFieldConfigToolStripMenuItem.Name = "customFieldConfigToolStripMenuItem";
-            this.customFieldConfigToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
-            this.customFieldConfigToolStripMenuItem.Text = "Custom Field Config";
-            this.customFieldConfigToolStripMenuItem.Click += new System.EventHandler(this.customFieldConfigToolStripMenuItem_Click);
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(153, 20);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(105, 13);
+            this.label9.TabIndex = 6;
+            this.label9.Text = "Start Header Column";
             // 
-            // extractProgess
+            // txt_StartHeaderCol
             // 
-            this.extractProgess.Location = new System.Drawing.Point(397, 306);
-            this.extractProgess.Name = "extractProgess";
-            this.extractProgess.Size = new System.Drawing.Size(100, 14);
-            this.extractProgess.TabIndex = 14;
+            this.txt_StartHeaderCol.Location = new System.Drawing.Point(264, 17);
+            this.txt_StartHeaderCol.Name = "txt_StartHeaderCol";
+            this.txt_StartHeaderCol.Size = new System.Drawing.Size(41, 20);
+            this.txt_StartHeaderCol.TabIndex = 7;
+            // 
+            // MappingTableDataGrid
+            // 
+            this.MappingTableDataGrid.AllowUserToAddRows = false;
+            this.MappingTableDataGrid.AllowUserToDeleteRows = false;
+            this.MappingTableDataGrid.AllowUserToResizeColumns = false;
+            this.MappingTableDataGrid.AllowUserToResizeRows = false;
+            this.MappingTableDataGrid.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.MappingTableDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.MappingTableDataGrid.GridColor = System.Drawing.SystemColors.ControlLightLight;
+            this.MappingTableDataGrid.Location = new System.Drawing.Point(11, 43);
+            this.MappingTableDataGrid.MultiSelect = false;
+            this.MappingTableDataGrid.Name = "MappingTableDataGrid";
+            this.MappingTableDataGrid.RowHeadersVisible = false;
+            this.MappingTableDataGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.MappingTableDataGrid.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.MappingTableDataGrid.Size = new System.Drawing.Size(490, 139);
+            this.MappingTableDataGrid.TabIndex = 8;
             // 
             // TFSUtilUI
             // 
@@ -823,8 +966,14 @@
             this.groupBox4.PerformLayout();
             this.statusStrip2.ResumeLayout(false);
             this.statusStrip2.PerformLayout();
+            this.rtmTab.ResumeLayout(false);
+            this.groupBox8.ResumeLayout(false);
+            this.groupBox8.PerformLayout();
+            this.groupBox7.ResumeLayout(false);
+            this.groupBox7.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MappingTableDataGrid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -902,6 +1051,19 @@
         private System.Windows.Forms.ToolStripMenuItem customFieldConfigToolStripMenuItem;
         private System.Windows.Forms.ProgressBar extractProgess;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.TabPage rtmTab;
+        private System.Windows.Forms.Button loadRequirements;
+        private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.GroupBox groupBox8;
+        private System.Windows.Forms.Button loadTemplate;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox txt_StartHeaderRow;
+        private System.Windows.Forms.Button browseRtmTemplate;
+        private System.Windows.Forms.TextBox txt_rtmTemplate;
+        private System.Drawing.Printing.PrintDocument printDocument1;
+        private System.Windows.Forms.TextBox txt_StartHeaderCol;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.DataGridView MappingTableDataGrid;
     }
 }
 
