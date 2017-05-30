@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
+using System.Xml.Linq;
 
 namespace TFSUtil.Internals
 {
@@ -15,6 +16,7 @@ namespace TFSUtil.Internals
         public static string testCaseFileName { get; set; }
 
         public static string getTemplateDrive { get; set; }
+        public static string getRTMDrive { get; set; }
 
         public static string getTCTemplateDrive { get; set; }
 
@@ -22,6 +24,10 @@ namespace TFSUtil.Internals
         public static string getReportPath { get; set; }
 
         public static string getTestPlan { get; set; }
+        public static string getTestCaseFieldsFromSetting { get; set; }
+        public static string getDefectFieldsFromSetting { get; set; }
+
+        public static string getRtmDestinationFile { get; set; }
         public static Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItemStore workItemStore
         {
             get
@@ -58,10 +64,17 @@ namespace TFSUtil.Internals
                 getDic.Add(getKey, getList.ToArray());
             }
         }
-
-        public static void AddToDictionary(Dictionary<string, string> getDic, string getKey, string getValue)
+        public static void loadSettings()
         {
-
+            XElement xdoc = XElement.Load(@"References\ProgramSettings.xml");
+            IEnumerable<XElement> xRows = xdoc.Elements();
+            // Read the entire XML
+            
+            foreach (XElement r in xRows)
+            {
+                getTestCaseFieldsFromSetting = r.Element("TestCaseRef").Value;
+                getDefectFieldsFromSetting = r.Element("DefectRef").Value;            
+            }
         }
     }
 }

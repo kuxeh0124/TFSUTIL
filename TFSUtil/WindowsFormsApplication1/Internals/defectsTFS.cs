@@ -155,7 +155,7 @@ namespace TFSUtil.Internals
 
         public void loadXMLDefectFields()
         {
-            XDocument xdoc = XDocument.Load(@"References\DefectFields.xml");
+            XDocument xdoc = XDocument.Load(@"References\" + Globals.getDefectFieldsFromSetting + ".xml");
             var xRows = from xRow in xdoc.Descendants("Row") select xRow.FirstNode;
             
             foreach (XElement r in xRows)
@@ -169,7 +169,7 @@ namespace TFSUtil.Internals
 
         public void loadXMLDefectFieldsForValidation()
         {
-            XDocument xdoc = XDocument.Load(@"References\DefectFields.xml");
+            XDocument xdoc = XDocument.Load(@"References\" + Globals.getDefectFieldsFromSetting + ".xml");
             var xRows = from xRow in xdoc.Descendants("Row") select xRow.FirstNode;
             xmlDefectFieldsVal.Add("SNo");
             xmlDefectFieldsVal.Add("ID");

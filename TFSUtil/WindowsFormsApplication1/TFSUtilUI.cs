@@ -22,7 +22,8 @@ namespace TFSUtil
 
         public TFSUtilUI()
         {
-            InitializeComponent();            
+            InitializeComponent();
+            Globals.loadSettings();
         }
 
         private void newConnectionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -708,13 +709,19 @@ namespace TFSUtil
         private void loadRequirements_Click(object sender, EventArgs e)
         {
             rtmTFS rtm = new rtmTFS();
-            int totalRow = MappingTableDataGrid.Rows.Count-1;
-            for(int x=0; x<=totalRow; x++)
+            ExcelProcessing xlProc = new ExcelProcessing();
+            int totalRow = MappingTableDataGrid.Rows.Count - 1;
+            for (int x = 0; x <= totalRow; x++)
             {
                 rtm.getRTMMappedFields[Convert.ToString(MappingTableDataGrid.Rows[x].Cells[0].Value)]
-                    = Convert.ToString(MappingTableDataGrid.Rows[x].Cells[1]);
+                    = Convert.ToString(MappingTableDataGrid.Rows[x].Cells[1].Value);
             }
+            string rtmDestFileName = txt_rtmTemplate.Text;
+            rtmDestFileName = rtmDestFileName.Substring(rtmDestFileName.LastIndexOf("\\"));
+            Globals.getRtmDestinationFile = txt_rtmDest.Text + rtmDestFileName;
+            File.Copy(txt_rtmTemplate.Text, Globals.getRtmDestinationFile, true);
             rtm.loadRequirements();
+            xlProc.CreateRTMFromTemplate(Convert.ToInt32(txt_StartHeaderRow.Text), Convert.ToInt32(txt_StartHeaderCol.Text), rtm);
         }
 
         private void browseRtmTemplate_Click(object sender, EventArgs e)
@@ -738,38 +745,74 @@ namespace TFSUtil
 
         private void loadTemplate_Click(object sender, EventArgs e)
         {
-            //MappingTableDataGrid.AutoGenerateColumns = false;            
-            ExcelProcessing xlProc = new ExcelProcessing();
-            rtmTFS rtm = new rtmTFS();
-
-            xlProc.loadRTMExcelFileHeaders(Convert.ToInt32(txt_StartHeaderRow.Text), 
-                Convert.ToInt32(txt_StartHeaderCol.Text), txt_rtmTemplate.Text);
-            rtm.loadRTMFields();
-            DataTable dt = new DataTable();
-            dt.Columns.Add("TemplateField", typeof(string));
-            dt.Columns.Add("MappingField", typeof(string));
-            for (int x = 0; x <= xlProc.rtmHeaders.Count - 1; x++)
+            if (txt_rtmDest.Text.Length < 0 && txt_rtmTemplate.Text.Length < 0)
             {
-                dt.Rows.Add(new string[] { xlProc.rtmHeaders[x], "Ignore" });
+                MessageBox.Show("Please set a source file and a destination location.", "Source and/Or Destination Missing", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            else if(txt_StartHeaderCol.Text.Length<0 && txt_StartHeaderRow.Text.Length<0)
+            {
+                MessageBox.Show("Please set a header row and column values", "Row and header Values Missing", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                ExcelProcessing xlProc = new ExcelProcessing();
+                rtmTFS rtm = new rtmTFS();
 
-            DataGridViewComboBoxColumn mf = new DataGridViewComboBoxColumn();
-            var list11 = rtm.getRTMFields;
-            mf.DataSource = list11;
-            mf.HeaderText = "MappingField";
-            mf.DataPropertyName = "MappingField";
-            mf.Width = 230;
-            mf.FlatStyle = FlatStyle.Flat; 
+                xlProc.loadRTMExcelFileHeaders(Convert.ToInt32(txt_StartHeaderRow.Text),
+                    Convert.ToInt32(txt_StartHeaderCol.Text), txt_rtmTemplate.Text);
+                rtm.loadRTMFields();
+                DataTable dt = new DataTable();
+                dt.Columns.Add("TemplateField", typeof(string));
+                dt.Columns.Add("MappingField", typeof(string));
+                for (int x = 0; x <= xlProc.rtmHeaders.Count - 1; x++)
+                {
+                    dt.Rows.Add(new string[] { xlProc.rtmHeaders[x], "Ignore" });
+                }
 
-            DataGridViewTextBoxColumn tf = new DataGridViewTextBoxColumn();
-            tf.HeaderText = "TemplateField";
-            tf.DataPropertyName = "TemplateField";
-            tf.ReadOnly = true;
-            tf.Width = 230;
+                DataGridViewComboBoxColumn mf = new DataGridViewComboBoxColumn();
+                var list11 = rtm.getRTMFields;
+                mf.DataSource = list11;
+                mf.HeaderText = "MappingField";
+                mf.DataPropertyName = "MappingField";
+                mf.Width = 230;
+                mf.FlatStyle = FlatStyle.Flat;
 
-            MappingTableDataGrid.Columns.Add(tf);
-            MappingTableDataGrid.Columns.Add(mf);
-            MappingTableDataGrid.DataSource = dt;
+                DataGridViewTextBoxColumn tf = new DataGridViewTextBoxColumn();
+                tf.HeaderText = "TemplateField";
+                tf.DataPropertyName = "TemplateField";
+                tf.ReadOnly = true;
+                tf.Width = 230;
+
+                MappingTableDataGrid.Columns.Add(tf);
+                MappingTableDataGrid.Columns.Add(mf);
+                MappingTableDataGrid.DataSource = dt;
+            }
+        }
+
+        private void btn_browseDestRtm_Click(object sender, EventArgs e)
+        {
+            int size = -1;
+            // Show the dialog.
+            FolderBrowserDialog fldg = folderBrowserDialog1;
+            //fldg.Filter = "Excel files (*.xls)|*.xls|Excel files (*.xlsx)|*.xlsx";
+            DialogResult result = fldg.ShowDialog();
+            if (result == DialogResult.OK) // Test result.
+            {
+                //string file = folderBrowserDialog1.FileName;
+                try
+                {
+                    //string text = File.ReadAllText(file);
+                    //size = text.Length;
+
+                    Globals.getRTMDrive = fldg.SelectedPath.ToString();
+                    txt_rtmDest.Text = Globals.getRTMDrive;
+                }
+                catch (IOException)
+                {
+                }
+            }
+            //Console.WriteLine(size); // <-- Shows file size in debugging mode.
+            //Console.WriteLine(result); // <-- For debugging use.
         }
     }
 }

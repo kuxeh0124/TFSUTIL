@@ -67,5 +67,70 @@ namespace TFSUtil
             }
             xdoc.Save(@"References\CustomFields.xml");
         }
+
+        private void CustomFieldConfig_Load(object sender, EventArgs e)
+        {
+            lst_Otptions.SelectedIndex = 0;
+
+        }
+       
+
+        private void lst_Otptions_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (lst_Otptions.SelectedItem.ToString())
+            {
+                case "Test Case Fields":                    
+                    customFieldsPanel.Dock = DockStyle.None;
+                    panel_TestCaseFields.Dock = DockStyle.Fill;
+                    panel_TestCaseFields.Visible = true;
+                    customFieldsPanel.Visible = false;
+                    Label tryLabel = new Label();
+                    panel_TestCaseFields.Controls.Add(tryLabel);
+                    tryLabel.Location = new Point(235, 15);
+                    tryLabel.Text = Internals.Globals.getTestCaseFieldsFromSetting + ".xml";
+                    Label currentLabel = new Label();
+                    panel_TestCaseFields.Controls.Add(currentLabel);
+                    currentLabel.Location = new Point(190, 15);
+                    currentLabel.Text = "Current: ";
+                    break;
+                case "Defect Fields":
+                    panel_TestCaseFields.Dock = DockStyle.None;
+                    customFieldsPanel.Dock = DockStyle.None;
+                    panel_TestCaseFields.Visible = false;
+                    customFieldsPanel.Visible = false;                    
+                    break;
+                case "Custom Fields":
+                    customFieldsPanel.Dock = DockStyle.Fill;
+                    panel_TestCaseFields.Dock = DockStyle.None;
+                    customFieldsPanel.Visible = true;
+                    panel_TestCaseFields.Visible = false;                    
+                    break;
+            }
+        }
+
+        private void txt_TextField2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txt_TextField3_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txt_TextField4_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txt_TextField1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

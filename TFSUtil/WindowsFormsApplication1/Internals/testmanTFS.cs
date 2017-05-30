@@ -456,6 +456,8 @@ namespace TFSUtil.Internals
                     vals.Add("Resolved");
                     vals.Add("Closed");
                     vals.Add("Reopened");
+                    vals.Add("Draft");
+                    vals.Add("Design");
                 }
             }
 
@@ -490,7 +492,8 @@ namespace TFSUtil.Internals
 
         public void loadXMLTCFields()
         {
-            XDocument xdoc = XDocument.Load(@"References\TestCaseFields.xml");
+            XDocument xdoc = XDocument.Load(@"References\" + Globals.getTestCaseFieldsFromSetting + ".xml");
+            //XDocument xdoc = XDocument.Load(@"References\TestCaseFields.xml");
             var xRows = from xRow in xdoc.Descendants("Row") select xRow.FirstNode;
 
             foreach (XElement r in xRows)
@@ -504,7 +507,7 @@ namespace TFSUtil.Internals
 
         public void loadXMLTCFieldsForValidation()
         {
-            XDocument xdoc = XDocument.Load(@"References\TestCaseFields.xml");
+            XDocument xdoc = XDocument.Load(@"References\" + Globals.getTestCaseFieldsFromSetting + ".xml");
             var xRows = from xRow in xdoc.Descendants("Row") select xRow.FirstNode;
             xmlTestCaseFieldsVal.Add("SNo");
             xmlTestCaseFieldsVal.Add("ID");

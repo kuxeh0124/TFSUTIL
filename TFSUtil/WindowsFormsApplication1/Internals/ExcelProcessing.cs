@@ -1008,6 +1008,39 @@ namespace TFSUtil.Internals
             ws.get_Range("G1").ColumnWidth = "22.14";
         }
 
+        public void CreateRTMFromTemplate(int startRow, int startColumn, rtmTFS rtm)
+        {            
+            excelInterop.Application xlApp = new excelInterop.Application();
+            excelInterop.Workbook wb = xlApp.Workbooks.Open(Globals.getRtmDestinationFile);
+            excelInterop.Worksheet ws = (excelInterop.Worksheet)wb.Worksheets[1];            
+            try
+            {
+                foreach(KeyValuePair<string, string> entry in rtm.rtmDic)
+                {
+                    startRow++;
+                    int newStartColumn = startColumn;
+                    string[] getValues = entry.Value.Split(new string[] { "<nxtData>" }, StringSplitOptions.None);
+                    for(int x=0; x<=getValues.Length-1; x++)
+                    {                        
+                        ws.Cells[startRow, newStartColumn].value2= HtmlToText.ConvertHtml(checkNull(Convert.ToString(getValues[x])));
+                        newStartColumn++;
+                    }                    
+                }                
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                wb.Saved = true;
+                wb.Save();
+                ReleaseExcel(wb, ws, xlApp);
+            }
+            finally
+            {
+                wb.Save();
+                ReleaseExcel(wb, ws, xlApp);
+            }
+        }
+
         private void CreateStepsSpecial(excelInterop.Application xlApp, excelInterop.Workbook wb,
             excelInterop.Worksheet ws, Dictionary<string, string> getDic, int rowNum)
         {
