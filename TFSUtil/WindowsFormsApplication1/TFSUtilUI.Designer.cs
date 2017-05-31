@@ -89,10 +89,17 @@
             this.statusLbl_ConnectionTM = new System.Windows.Forms.ToolStripStatusLabel();
             this.rtmTab = new System.Windows.Forms.TabPage();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.MappingTableDataGrid = new System.Windows.Forms.DataGridView();
+            this.txt_StartHeaderCol = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
             this.loadTemplate = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
             this.txt_StartHeaderRow = new System.Windows.Forms.TextBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.btn_browseDestRtm = new System.Windows.Forms.Button();
+            this.txt_rtmDest = new System.Windows.Forms.TextBox();
             this.browseRtmTemplate = new System.Windows.Forms.Button();
             this.txt_rtmTemplate = new System.Windows.Forms.TextBox();
             this.loadRequirements = new System.Windows.Forms.Button();
@@ -109,16 +116,6 @@
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.printDocument1 = new System.Drawing.Printing.PrintDocument();
-            this.label9 = new System.Windows.Forms.Label();
-            this.txt_StartHeaderCol = new System.Windows.Forms.TextBox();
-            this.MappingTableDataGrid = new System.Windows.Forms.DataGridView();
-            this.btn_browseDestRtm = new System.Windows.Forms.Button();
-            this.txt_rtmDest = new System.Windows.Forms.TextBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.testCaseFieldsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.defectFieldsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.customizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             newConnectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.defMan.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -133,9 +130,9 @@
             this.statusStrip2.SuspendLayout();
             this.rtmTab.SuspendLayout();
             this.groupBox8.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MappingTableDataGrid)).BeginInit();
             this.groupBox7.SuspendLayout();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.MappingTableDataGrid)).BeginInit();
             this.SuspendLayout();
             // 
             // newConnectionToolStripMenuItem
@@ -766,6 +763,40 @@
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = "Map Fields";
             // 
+            // MappingTableDataGrid
+            // 
+            this.MappingTableDataGrid.AllowUserToAddRows = false;
+            this.MappingTableDataGrid.AllowUserToDeleteRows = false;
+            this.MappingTableDataGrid.AllowUserToResizeColumns = false;
+            this.MappingTableDataGrid.AllowUserToResizeRows = false;
+            this.MappingTableDataGrid.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.MappingTableDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.MappingTableDataGrid.GridColor = System.Drawing.SystemColors.ControlLightLight;
+            this.MappingTableDataGrid.Location = new System.Drawing.Point(11, 43);
+            this.MappingTableDataGrid.MultiSelect = false;
+            this.MappingTableDataGrid.Name = "MappingTableDataGrid";
+            this.MappingTableDataGrid.RowHeadersVisible = false;
+            this.MappingTableDataGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.MappingTableDataGrid.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.MappingTableDataGrid.Size = new System.Drawing.Size(490, 159);
+            this.MappingTableDataGrid.TabIndex = 8;
+            // 
+            // txt_StartHeaderCol
+            // 
+            this.txt_StartHeaderCol.Location = new System.Drawing.Point(264, 17);
+            this.txt_StartHeaderCol.Name = "txt_StartHeaderCol";
+            this.txt_StartHeaderCol.Size = new System.Drawing.Size(41, 20);
+            this.txt_StartHeaderCol.TabIndex = 7;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(153, 20);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(105, 13);
+            this.label9.TabIndex = 6;
+            this.label9.Text = "Start Header Column";
+            // 
             // loadTemplate
             // 
             this.loadTemplate.Location = new System.Drawing.Point(311, 15);
@@ -806,6 +837,41 @@
             this.groupBox7.TabIndex = 1;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Browse Template";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(7, 49);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(60, 13);
+            this.label11.TabIndex = 9;
+            this.label11.Text = "Destination";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(7, 22);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(41, 13);
+            this.label10.TabIndex = 9;
+            this.label10.Text = "Source";
+            // 
+            // btn_browseDestRtm
+            // 
+            this.btn_browseDestRtm.Location = new System.Drawing.Point(425, 44);
+            this.btn_browseDestRtm.Name = "btn_browseDestRtm";
+            this.btn_browseDestRtm.Size = new System.Drawing.Size(75, 23);
+            this.btn_browseDestRtm.TabIndex = 4;
+            this.btn_browseDestRtm.Text = "Browse";
+            this.btn_browseDestRtm.UseVisualStyleBackColor = true;
+            this.btn_browseDestRtm.Click += new System.EventHandler(this.btn_browseDestRtm_Click);
+            // 
+            // txt_rtmDest
+            // 
+            this.txt_rtmDest.Location = new System.Drawing.Point(70, 46);
+            this.txt_rtmDest.Name = "txt_rtmDest";
+            this.txt_rtmDest.Size = new System.Drawing.Size(349, 20);
+            this.txt_rtmDest.TabIndex = 3;
             // 
             // browseRtmTemplate
             // 
@@ -871,10 +937,7 @@
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.customFieldConfigToolStripMenuItem,
-            this.testCaseFieldsToolStripMenuItem,
-            this.defectFieldsToolStripMenuItem,
-            this.customizeToolStripMenuItem});
+            this.customFieldConfigToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.editToolStripMenuItem.Text = "Settings";
@@ -882,8 +945,8 @@
             // customFieldConfigToolStripMenuItem
             // 
             this.customFieldConfigToolStripMenuItem.Name = "customFieldConfigToolStripMenuItem";
-            this.customFieldConfigToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
-            this.customFieldConfigToolStripMenuItem.Text = "Custom Field Config";
+            this.customFieldConfigToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.customFieldConfigToolStripMenuItem.Text = "Customize";
             this.customFieldConfigToolStripMenuItem.Click += new System.EventHandler(this.customFieldConfigToolStripMenuItem_Click);
             // 
             // connectionToolStripMenuItem
@@ -913,93 +976,6 @@
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(153, 20);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(105, 13);
-            this.label9.TabIndex = 6;
-            this.label9.Text = "Start Header Column";
-            // 
-            // txt_StartHeaderCol
-            // 
-            this.txt_StartHeaderCol.Location = new System.Drawing.Point(264, 17);
-            this.txt_StartHeaderCol.Name = "txt_StartHeaderCol";
-            this.txt_StartHeaderCol.Size = new System.Drawing.Size(41, 20);
-            this.txt_StartHeaderCol.TabIndex = 7;
-            // 
-            // MappingTableDataGrid
-            // 
-            this.MappingTableDataGrid.AllowUserToAddRows = false;
-            this.MappingTableDataGrid.AllowUserToDeleteRows = false;
-            this.MappingTableDataGrid.AllowUserToResizeColumns = false;
-            this.MappingTableDataGrid.AllowUserToResizeRows = false;
-            this.MappingTableDataGrid.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.MappingTableDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.MappingTableDataGrid.GridColor = System.Drawing.SystemColors.ControlLightLight;
-            this.MappingTableDataGrid.Location = new System.Drawing.Point(11, 43);
-            this.MappingTableDataGrid.MultiSelect = false;
-            this.MappingTableDataGrid.Name = "MappingTableDataGrid";
-            this.MappingTableDataGrid.RowHeadersVisible = false;
-            this.MappingTableDataGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.MappingTableDataGrid.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.MappingTableDataGrid.Size = new System.Drawing.Size(490, 159);
-            this.MappingTableDataGrid.TabIndex = 8;
-            // 
-            // btn_browseDestRtm
-            // 
-            this.btn_browseDestRtm.Location = new System.Drawing.Point(425, 44);
-            this.btn_browseDestRtm.Name = "btn_browseDestRtm";
-            this.btn_browseDestRtm.Size = new System.Drawing.Size(75, 23);
-            this.btn_browseDestRtm.TabIndex = 4;
-            this.btn_browseDestRtm.Text = "Browse";
-            this.btn_browseDestRtm.UseVisualStyleBackColor = true;
-            this.btn_browseDestRtm.Click += new System.EventHandler(this.btn_browseDestRtm_Click);
-            // 
-            // txt_rtmDest
-            // 
-            this.txt_rtmDest.Location = new System.Drawing.Point(70, 46);
-            this.txt_rtmDest.Name = "txt_rtmDest";
-            this.txt_rtmDest.Size = new System.Drawing.Size(349, 20);
-            this.txt_rtmDest.TabIndex = 3;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(7, 22);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(41, 13);
-            this.label10.TabIndex = 9;
-            this.label10.Text = "Source";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(7, 49);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(60, 13);
-            this.label11.TabIndex = 9;
-            this.label11.Text = "Destination";
-            // 
-            // testCaseFieldsToolStripMenuItem
-            // 
-            this.testCaseFieldsToolStripMenuItem.Name = "testCaseFieldsToolStripMenuItem";
-            this.testCaseFieldsToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
-            this.testCaseFieldsToolStripMenuItem.Text = "Test Case Fields";
-            // 
-            // defectFieldsToolStripMenuItem
-            // 
-            this.defectFieldsToolStripMenuItem.Name = "defectFieldsToolStripMenuItem";
-            this.defectFieldsToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
-            this.defectFieldsToolStripMenuItem.Text = "Defect Fields";
-            // 
-            // customizeToolStripMenuItem
-            // 
-            this.customizeToolStripMenuItem.Name = "customizeToolStripMenuItem";
-            this.customizeToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
-            this.customizeToolStripMenuItem.Text = "Customize";
             // 
             // TFSUtilUI
             // 
@@ -1037,11 +1013,11 @@
             this.rtmTab.ResumeLayout(false);
             this.groupBox8.ResumeLayout(false);
             this.groupBox8.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MappingTableDataGrid)).EndInit();
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.MappingTableDataGrid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1136,9 +1112,6 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Button btn_browseDestRtm;
         private System.Windows.Forms.TextBox txt_rtmDest;
-        private System.Windows.Forms.ToolStripMenuItem testCaseFieldsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem defectFieldsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem customizeToolStripMenuItem;
     }
 }
 

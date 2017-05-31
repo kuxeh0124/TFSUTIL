@@ -505,6 +505,21 @@ namespace TFSUtil.Internals
             }
         }
 
+        public void loadXMLTCFields(string getFile)
+        {
+            XDocument xdoc = XDocument.Load(@"References\" + getFile);
+            //XDocument xdoc = XDocument.Load(@"References\TestCaseFields.xml");
+            var xRows = from xRow in xdoc.Descendants("Row") select xRow.FirstNode;
+
+            foreach (XElement r in xRows)
+            {
+                if (!xmlTestCaseFields.Contains(r.Value))
+                {
+                    xmlTestCaseFields.Add(r.Value);
+                }
+            }
+        }
+
         public void loadXMLTCFieldsForValidation()
         {
             XDocument xdoc = XDocument.Load(@"References\" + Globals.getTestCaseFieldsFromSetting + ".xml");

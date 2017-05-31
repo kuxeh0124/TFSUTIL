@@ -50,23 +50,28 @@
             this.txt_Remarks1 = new System.Windows.Forms.TextBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.lst_Otptions = new System.Windows.Forms.ListBox();
-            this.customFieldsPanel = new System.Windows.Forms.Panel();
             this.panel_TestCaseFields = new System.Windows.Forms.Panel();
             this.button3 = new System.Windows.Forms.Button();
             this.cancelUpdate = new System.Windows.Forms.Button();
-            this.applyChanges = new System.Windows.Forms.Button();
+            this.btn_applyUseTemplate = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.combo_tcTemplatelist = new System.Windows.Forms.ComboBox();
             this.dgv_TestCaseFields = new System.Windows.Forms.DataGridView();
+            this.customFieldsPanel = new System.Windows.Forms.Panel();
+            this.btn_dgvtc_Edit = new System.Windows.Forms.Button();
+            this.btn_dgvtc_up = new System.Windows.Forms.Button();
+            this.btn_dgvtc_down = new System.Windows.Forms.Button();
+            this.btn_dgvtc_delete = new System.Windows.Forms.Button();
+            this.btn_doneEdit = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.customFieldsPanel.SuspendLayout();
             this.panel_TestCaseFields.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_TestCaseFields)).BeginInit();
+            this.customFieldsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -272,7 +277,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.panel_TestCaseFields);
             this.splitContainer1.Panel2.Controls.Add(this.customFieldsPanel);
-            this.splitContainer1.Size = new System.Drawing.Size(474, 429);
+            this.splitContainer1.Size = new System.Drawing.Size(474, 419);
             this.splitContainer1.SplitterDistance = 120;
             this.splitContainer1.TabIndex = 9;
             // 
@@ -286,33 +291,28 @@
             "Custom Fields"});
             this.lst_Otptions.Location = new System.Drawing.Point(0, 0);
             this.lst_Otptions.Name = "lst_Otptions";
-            this.lst_Otptions.Size = new System.Drawing.Size(122, 429);
+            this.lst_Otptions.Size = new System.Drawing.Size(122, 419);
             this.lst_Otptions.TabIndex = 0;
             this.lst_Otptions.SelectedIndexChanged += new System.EventHandler(this.lst_Otptions_SelectedIndexChanged);
-            // 
-            // customFieldsPanel
-            // 
-            this.customFieldsPanel.Controls.Add(this.groupBox1);
-            this.customFieldsPanel.Controls.Add(this.groupBox2);
-            this.customFieldsPanel.Location = new System.Drawing.Point(4, 3);
-            this.customFieldsPanel.Name = "customFieldsPanel";
-            this.customFieldsPanel.Size = new System.Drawing.Size(347, 424);
-            this.customFieldsPanel.TabIndex = 0;
-            this.customFieldsPanel.Visible = false;
             // 
             // panel_TestCaseFields
             // 
             this.panel_TestCaseFields.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_TestCaseFields.Controls.Add(this.btn_doneEdit);
+            this.panel_TestCaseFields.Controls.Add(this.btn_dgvtc_delete);
+            this.panel_TestCaseFields.Controls.Add(this.btn_dgvtc_down);
+            this.panel_TestCaseFields.Controls.Add(this.btn_dgvtc_up);
+            this.panel_TestCaseFields.Controls.Add(this.btn_dgvtc_Edit);
             this.panel_TestCaseFields.Controls.Add(this.button3);
             this.panel_TestCaseFields.Controls.Add(this.cancelUpdate);
-            this.panel_TestCaseFields.Controls.Add(this.applyChanges);
+            this.panel_TestCaseFields.Controls.Add(this.btn_applyUseTemplate);
             this.panel_TestCaseFields.Controls.Add(this.label9);
             this.panel_TestCaseFields.Controls.Add(this.combo_tcTemplatelist);
             this.panel_TestCaseFields.Controls.Add(this.dgv_TestCaseFields);
             this.panel_TestCaseFields.Location = new System.Drawing.Point(4, 3);
             this.panel_TestCaseFields.Name = "panel_TestCaseFields";
             this.panel_TestCaseFields.Size = new System.Drawing.Size(347, 424);
-            this.panel_TestCaseFields.TabIndex = 10;            
+            this.panel_TestCaseFields.TabIndex = 10;
             // 
             // button3
             // 
@@ -332,19 +332,20 @@
             this.cancelUpdate.Text = "Cancel";
             this.cancelUpdate.UseVisualStyleBackColor = true;
             // 
-            // applyChanges
+            // btn_applyUseTemplate
             // 
-            this.applyChanges.Location = new System.Drawing.Point(95, 389);
-            this.applyChanges.Name = "applyChanges";
-            this.applyChanges.Size = new System.Drawing.Size(76, 23);
-            this.applyChanges.TabIndex = 3;
-            this.applyChanges.Text = "Apply";
-            this.applyChanges.UseVisualStyleBackColor = true;
+            this.btn_applyUseTemplate.Location = new System.Drawing.Point(95, 389);
+            this.btn_applyUseTemplate.Name = "btn_applyUseTemplate";
+            this.btn_applyUseTemplate.Size = new System.Drawing.Size(76, 23);
+            this.btn_applyUseTemplate.TabIndex = 3;
+            this.btn_applyUseTemplate.Text = "Apply";
+            this.btn_applyUseTemplate.UseVisualStyleBackColor = true;
+            this.btn_applyUseTemplate.Click += new System.EventHandler(this.btn_applyUseTemplate_Click);
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(6, 15);
+            this.label9.Location = new System.Drawing.Point(6, 12);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(51, 13);
             this.label9.TabIndex = 2;
@@ -353,30 +354,95 @@
             // combo_tcTemplatelist
             // 
             this.combo_tcTemplatelist.FormattingEnabled = true;
-            this.combo_tcTemplatelist.Location = new System.Drawing.Point(63, 12);
+            this.combo_tcTemplatelist.Location = new System.Drawing.Point(63, 9);
             this.combo_tcTemplatelist.Name = "combo_tcTemplatelist";
             this.combo_tcTemplatelist.Size = new System.Drawing.Size(121, 21);
             this.combo_tcTemplatelist.TabIndex = 1;
+            this.combo_tcTemplatelist.SelectedIndexChanged += new System.EventHandler(this.combo_tcTemplatelist_SelectedIndexChanged);
             // 
             // dgv_TestCaseFields
             // 
+            this.dgv_TestCaseFields.AllowUserToAddRows = false;
             this.dgv_TestCaseFields.AllowUserToResizeColumns = false;
             this.dgv_TestCaseFields.AllowUserToResizeRows = false;
             this.dgv_TestCaseFields.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
             this.dgv_TestCaseFields.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgv_TestCaseFields.Location = new System.Drawing.Point(9, 44);
+            this.dgv_TestCaseFields.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.dgv_TestCaseFields.Location = new System.Drawing.Point(9, 53);
+            this.dgv_TestCaseFields.MultiSelect = false;
             this.dgv_TestCaseFields.Name = "dgv_TestCaseFields";
-            this.dgv_TestCaseFields.Size = new System.Drawing.Size(330, 341);
+            this.dgv_TestCaseFields.RowHeadersVisible = false;
+            this.dgv_TestCaseFields.Size = new System.Drawing.Size(276, 330);
             this.dgv_TestCaseFields.TabIndex = 0;
+            // 
+            // customFieldsPanel
+            // 
+            this.customFieldsPanel.Controls.Add(this.groupBox1);
+            this.customFieldsPanel.Controls.Add(this.groupBox2);
+            this.customFieldsPanel.Location = new System.Drawing.Point(4, 3);
+            this.customFieldsPanel.Name = "customFieldsPanel";
+            this.customFieldsPanel.Size = new System.Drawing.Size(347, 424);
+            this.customFieldsPanel.TabIndex = 0;
+            this.customFieldsPanel.Visible = false;
+            // 
+            // btn_dgvtc_Edit
+            // 
+            this.btn_dgvtc_Edit.Location = new System.Drawing.Point(291, 53);
+            this.btn_dgvtc_Edit.Name = "btn_dgvtc_Edit";
+            this.btn_dgvtc_Edit.Size = new System.Drawing.Size(48, 24);
+            this.btn_dgvtc_Edit.TabIndex = 6;
+            this.btn_dgvtc_Edit.Text = "Edit";
+            this.btn_dgvtc_Edit.UseVisualStyleBackColor = true;
+            this.btn_dgvtc_Edit.Click += new System.EventHandler(this.btn_dgvtc_Edit_Click);
+            // 
+            // btn_dgvtc_up
+            // 
+            this.btn_dgvtc_up.Location = new System.Drawing.Point(291, 81);
+            this.btn_dgvtc_up.Name = "btn_dgvtc_up";
+            this.btn_dgvtc_up.Size = new System.Drawing.Size(48, 24);
+            this.btn_dgvtc_up.TabIndex = 7;
+            this.btn_dgvtc_up.Text = "Up";
+            this.btn_dgvtc_up.UseVisualStyleBackColor = true;
+            this.btn_dgvtc_up.Visible = false;
+            // 
+            // btn_dgvtc_down
+            // 
+            this.btn_dgvtc_down.Location = new System.Drawing.Point(291, 111);
+            this.btn_dgvtc_down.Name = "btn_dgvtc_down";
+            this.btn_dgvtc_down.Size = new System.Drawing.Size(48, 24);
+            this.btn_dgvtc_down.TabIndex = 8;
+            this.btn_dgvtc_down.Text = "Down";
+            this.btn_dgvtc_down.UseVisualStyleBackColor = true;
+            this.btn_dgvtc_down.Visible = false;
+            // 
+            // btn_dgvtc_delete
+            // 
+            this.btn_dgvtc_delete.Location = new System.Drawing.Point(291, 141);
+            this.btn_dgvtc_delete.Name = "btn_dgvtc_delete";
+            this.btn_dgvtc_delete.Size = new System.Drawing.Size(48, 24);
+            this.btn_dgvtc_delete.TabIndex = 9;
+            this.btn_dgvtc_delete.Text = "Delete";
+            this.btn_dgvtc_delete.UseVisualStyleBackColor = true;
+            this.btn_dgvtc_delete.Visible = false;
+            // 
+            // btn_doneEdit
+            // 
+            this.btn_doneEdit.Location = new System.Drawing.Point(291, 53);
+            this.btn_doneEdit.Name = "btn_doneEdit";
+            this.btn_doneEdit.Size = new System.Drawing.Size(48, 24);
+            this.btn_doneEdit.TabIndex = 10;
+            this.btn_doneEdit.Text = "Done";
+            this.btn_doneEdit.UseVisualStyleBackColor = true;
+            this.btn_doneEdit.Visible = false;
             // 
             // CustomFieldConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(474, 429);
+            this.ClientSize = new System.Drawing.Size(474, 419);
             this.Controls.Add(this.splitContainer1);
             this.Name = "CustomFieldConfig";
-            this.Text = "Custom Field Mapping";
+            this.Text = "Customize Fields";
             this.Load += new System.EventHandler(this.CustomFieldConfig_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -386,10 +452,10 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            this.customFieldsPanel.ResumeLayout(false);
             this.panel_TestCaseFields.ResumeLayout(false);
             this.panel_TestCaseFields.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_TestCaseFields)).EndInit();
+            this.customFieldsPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -422,9 +488,14 @@
         private System.Windows.Forms.Panel panel_TestCaseFields;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button cancelUpdate;
-        private System.Windows.Forms.Button applyChanges;
+        private System.Windows.Forms.Button btn_applyUseTemplate;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.ComboBox combo_tcTemplatelist;
         private System.Windows.Forms.DataGridView dgv_TestCaseFields;
+        private System.Windows.Forms.Button btn_dgvtc_delete;
+        private System.Windows.Forms.Button btn_dgvtc_down;
+        private System.Windows.Forms.Button btn_dgvtc_up;
+        private System.Windows.Forms.Button btn_dgvtc_Edit;
+        private System.Windows.Forms.Button btn_doneEdit;
     }
 }
