@@ -51,18 +51,26 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.lst_Otptions = new System.Windows.Forms.ListBox();
             this.panel_TestCaseFields = new System.Windows.Forms.Panel();
-            this.button3 = new System.Windows.Forms.Button();
+            this.btn_getTCFromProject = new System.Windows.Forms.Button();
+            this.btn_dgv_addRow = new System.Windows.Forms.Button();
+            this.btn_LoadTCTemplate = new System.Windows.Forms.Button();
+            this.btn_doneEdit = new System.Windows.Forms.Button();
+            this.btn_dgvtc_delete = new System.Windows.Forms.Button();
+            this.btn_dgvtc_down = new System.Windows.Forms.Button();
+            this.btn_dgvtc_up = new System.Windows.Forms.Button();
+            this.btn_dgvtc_Edit = new System.Windows.Forms.Button();
+            this.btn_SaveTemplate = new System.Windows.Forms.Button();
             this.cancelUpdate = new System.Windows.Forms.Button();
             this.btn_applyUseTemplate = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.combo_tcTemplatelist = new System.Windows.Forms.ComboBox();
             this.dgv_TestCaseFields = new System.Windows.Forms.DataGridView();
             this.customFieldsPanel = new System.Windows.Forms.Panel();
-            this.btn_dgvtc_Edit = new System.Windows.Forms.Button();
-            this.btn_dgvtc_up = new System.Windows.Forms.Button();
-            this.btn_dgvtc_down = new System.Windows.Forms.Button();
-            this.btn_dgvtc_delete = new System.Windows.Forms.Button();
-            this.btn_doneEdit = new System.Windows.Forms.Button();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.button3 = new System.Windows.Forms.Button();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -286,8 +294,7 @@
             this.lst_Otptions.Dock = System.Windows.Forms.DockStyle.Left;
             this.lst_Otptions.FormattingEnabled = true;
             this.lst_Otptions.Items.AddRange(new object[] {
-            "Test Case Fields",
-            "Defect Fields",
+            "Defect and Test Case",
             "Custom Fields"});
             this.lst_Otptions.Location = new System.Drawing.Point(0, 0);
             this.lst_Otptions.Name = "lst_Otptions";
@@ -298,12 +305,20 @@
             // panel_TestCaseFields
             // 
             this.panel_TestCaseFields.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_TestCaseFields.Controls.Add(this.label11);
+            this.panel_TestCaseFields.Controls.Add(this.label10);
+            this.panel_TestCaseFields.Controls.Add(this.button3);
+            this.panel_TestCaseFields.Controls.Add(this.comboBox2);
+            this.panel_TestCaseFields.Controls.Add(this.comboBox1);
+            this.panel_TestCaseFields.Controls.Add(this.btn_getTCFromProject);
+            this.panel_TestCaseFields.Controls.Add(this.btn_dgv_addRow);
+            this.panel_TestCaseFields.Controls.Add(this.btn_LoadTCTemplate);
             this.panel_TestCaseFields.Controls.Add(this.btn_doneEdit);
             this.panel_TestCaseFields.Controls.Add(this.btn_dgvtc_delete);
             this.panel_TestCaseFields.Controls.Add(this.btn_dgvtc_down);
             this.panel_TestCaseFields.Controls.Add(this.btn_dgvtc_up);
             this.panel_TestCaseFields.Controls.Add(this.btn_dgvtc_Edit);
-            this.panel_TestCaseFields.Controls.Add(this.button3);
+            this.panel_TestCaseFields.Controls.Add(this.btn_SaveTemplate);
             this.panel_TestCaseFields.Controls.Add(this.cancelUpdate);
             this.panel_TestCaseFields.Controls.Add(this.btn_applyUseTemplate);
             this.panel_TestCaseFields.Controls.Add(this.label9);
@@ -314,14 +329,99 @@
             this.panel_TestCaseFields.Size = new System.Drawing.Size(347, 424);
             this.panel_TestCaseFields.TabIndex = 10;
             // 
-            // button3
+            // btn_getTCFromProject
             // 
-            this.button3.Location = new System.Drawing.Point(178, 389);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(76, 23);
-            this.button3.TabIndex = 5;
-            this.button3.Text = "Save";
-            this.button3.UseVisualStyleBackColor = true;
+            this.btn_getTCFromProject.Enabled = false;
+            this.btn_getTCFromProject.Location = new System.Drawing.Point(217, 9);
+            this.btn_getTCFromProject.Name = "btn_getTCFromProject";
+            this.btn_getTCFromProject.Size = new System.Drawing.Size(118, 22);
+            this.btn_getTCFromProject.TabIndex = 13;
+            this.btn_getTCFromProject.Text = "Load From Project";
+            this.btn_getTCFromProject.UseVisualStyleBackColor = true;
+            // 
+            // btn_dgv_addRow
+            // 
+            this.btn_dgv_addRow.Location = new System.Drawing.Point(287, 178);
+            this.btn_dgv_addRow.Name = "btn_dgv_addRow";
+            this.btn_dgv_addRow.Size = new System.Drawing.Size(48, 24);
+            this.btn_dgv_addRow.TabIndex = 12;
+            this.btn_dgv_addRow.Text = "Add";
+            this.btn_dgv_addRow.UseVisualStyleBackColor = true;
+            this.btn_dgv_addRow.Visible = false;
+            this.btn_dgv_addRow.Click += new System.EventHandler(this.btn_dgv_addRow_Click);
+            // 
+            // btn_LoadTCTemplate
+            // 
+            this.btn_LoadTCTemplate.Location = new System.Drawing.Point(217, 36);
+            this.btn_LoadTCTemplate.Name = "btn_LoadTCTemplate";
+            this.btn_LoadTCTemplate.Size = new System.Drawing.Size(118, 21);
+            this.btn_LoadTCTemplate.TabIndex = 11;
+            this.btn_LoadTCTemplate.Text = "Load";
+            this.btn_LoadTCTemplate.UseVisualStyleBackColor = true;
+            this.btn_LoadTCTemplate.Click += new System.EventHandler(this.btn_LoadTCTemplate_Click);
+            // 
+            // btn_doneEdit
+            // 
+            this.btn_doneEdit.Location = new System.Drawing.Point(287, 90);
+            this.btn_doneEdit.Name = "btn_doneEdit";
+            this.btn_doneEdit.Size = new System.Drawing.Size(48, 24);
+            this.btn_doneEdit.TabIndex = 10;
+            this.btn_doneEdit.Text = "Done";
+            this.btn_doneEdit.UseVisualStyleBackColor = true;
+            this.btn_doneEdit.Visible = false;
+            this.btn_doneEdit.Click += new System.EventHandler(this.btn_doneEdit_Click);
+            // 
+            // btn_dgvtc_delete
+            // 
+            this.btn_dgvtc_delete.Location = new System.Drawing.Point(287, 208);
+            this.btn_dgvtc_delete.Name = "btn_dgvtc_delete";
+            this.btn_dgvtc_delete.Size = new System.Drawing.Size(48, 24);
+            this.btn_dgvtc_delete.TabIndex = 9;
+            this.btn_dgvtc_delete.Text = "Delete";
+            this.btn_dgvtc_delete.UseVisualStyleBackColor = true;
+            this.btn_dgvtc_delete.Visible = false;
+            this.btn_dgvtc_delete.Click += new System.EventHandler(this.btn_dgvtc_delete_Click);
+            // 
+            // btn_dgvtc_down
+            // 
+            this.btn_dgvtc_down.Location = new System.Drawing.Point(287, 148);
+            this.btn_dgvtc_down.Name = "btn_dgvtc_down";
+            this.btn_dgvtc_down.Size = new System.Drawing.Size(48, 24);
+            this.btn_dgvtc_down.TabIndex = 8;
+            this.btn_dgvtc_down.Text = "Down";
+            this.btn_dgvtc_down.UseVisualStyleBackColor = true;
+            this.btn_dgvtc_down.Visible = false;
+            this.btn_dgvtc_down.Click += new System.EventHandler(this.btn_dgvtc_down_Click);
+            // 
+            // btn_dgvtc_up
+            // 
+            this.btn_dgvtc_up.Location = new System.Drawing.Point(287, 118);
+            this.btn_dgvtc_up.Name = "btn_dgvtc_up";
+            this.btn_dgvtc_up.Size = new System.Drawing.Size(48, 24);
+            this.btn_dgvtc_up.TabIndex = 7;
+            this.btn_dgvtc_up.Text = "Up";
+            this.btn_dgvtc_up.UseVisualStyleBackColor = true;
+            this.btn_dgvtc_up.Visible = false;
+            this.btn_dgvtc_up.Click += new System.EventHandler(this.btn_dgvtc_up_Click);
+            // 
+            // btn_dgvtc_Edit
+            // 
+            this.btn_dgvtc_Edit.Location = new System.Drawing.Point(287, 90);
+            this.btn_dgvtc_Edit.Name = "btn_dgvtc_Edit";
+            this.btn_dgvtc_Edit.Size = new System.Drawing.Size(48, 24);
+            this.btn_dgvtc_Edit.TabIndex = 6;
+            this.btn_dgvtc_Edit.Text = "Edit";
+            this.btn_dgvtc_Edit.UseVisualStyleBackColor = true;
+            this.btn_dgvtc_Edit.Click += new System.EventHandler(this.btn_dgvtc_Edit_Click);
+            // 
+            // btn_SaveTemplate
+            // 
+            this.btn_SaveTemplate.Location = new System.Drawing.Point(178, 389);
+            this.btn_SaveTemplate.Name = "btn_SaveTemplate";
+            this.btn_SaveTemplate.Size = new System.Drawing.Size(76, 23);
+            this.btn_SaveTemplate.TabIndex = 5;
+            this.btn_SaveTemplate.Text = "Save";
+            this.btn_SaveTemplate.UseVisualStyleBackColor = true;
             // 
             // cancelUpdate
             // 
@@ -356,7 +456,7 @@
             this.combo_tcTemplatelist.FormattingEnabled = true;
             this.combo_tcTemplatelist.Location = new System.Drawing.Point(63, 9);
             this.combo_tcTemplatelist.Name = "combo_tcTemplatelist";
-            this.combo_tcTemplatelist.Size = new System.Drawing.Size(121, 21);
+            this.combo_tcTemplatelist.Size = new System.Drawing.Size(148, 21);
             this.combo_tcTemplatelist.TabIndex = 1;
             this.combo_tcTemplatelist.SelectedIndexChanged += new System.EventHandler(this.combo_tcTemplatelist_SelectedIndexChanged);
             // 
@@ -368,11 +468,11 @@
             this.dgv_TestCaseFields.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
             this.dgv_TestCaseFields.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_TestCaseFields.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.dgv_TestCaseFields.Location = new System.Drawing.Point(9, 53);
+            this.dgv_TestCaseFields.Location = new System.Drawing.Point(9, 90);
             this.dgv_TestCaseFields.MultiSelect = false;
             this.dgv_TestCaseFields.Name = "dgv_TestCaseFields";
             this.dgv_TestCaseFields.RowHeadersVisible = false;
-            this.dgv_TestCaseFields.Size = new System.Drawing.Size(276, 330);
+            this.dgv_TestCaseFields.Size = new System.Drawing.Size(276, 293);
             this.dgv_TestCaseFields.TabIndex = 0;
             // 
             // customFieldsPanel
@@ -385,55 +485,48 @@
             this.customFieldsPanel.TabIndex = 0;
             this.customFieldsPanel.Visible = false;
             // 
-            // btn_dgvtc_Edit
+            // comboBox1
             // 
-            this.btn_dgvtc_Edit.Location = new System.Drawing.Point(291, 53);
-            this.btn_dgvtc_Edit.Name = "btn_dgvtc_Edit";
-            this.btn_dgvtc_Edit.Size = new System.Drawing.Size(48, 24);
-            this.btn_dgvtc_Edit.TabIndex = 6;
-            this.btn_dgvtc_Edit.Text = "Edit";
-            this.btn_dgvtc_Edit.UseVisualStyleBackColor = true;
-            this.btn_dgvtc_Edit.Click += new System.EventHandler(this.btn_dgvtc_Edit_Click);
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(63, 36);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(148, 21);
+            this.comboBox1.TabIndex = 14;
             // 
-            // btn_dgvtc_up
+            // comboBox2
             // 
-            this.btn_dgvtc_up.Location = new System.Drawing.Point(291, 81);
-            this.btn_dgvtc_up.Name = "btn_dgvtc_up";
-            this.btn_dgvtc_up.Size = new System.Drawing.Size(48, 24);
-            this.btn_dgvtc_up.TabIndex = 7;
-            this.btn_dgvtc_up.Text = "Up";
-            this.btn_dgvtc_up.UseVisualStyleBackColor = true;
-            this.btn_dgvtc_up.Visible = false;
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Location = new System.Drawing.Point(63, 63);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(148, 21);
+            this.comboBox2.TabIndex = 15;
             // 
-            // btn_dgvtc_down
+            // button3
             // 
-            this.btn_dgvtc_down.Location = new System.Drawing.Point(291, 111);
-            this.btn_dgvtc_down.Name = "btn_dgvtc_down";
-            this.btn_dgvtc_down.Size = new System.Drawing.Size(48, 24);
-            this.btn_dgvtc_down.TabIndex = 8;
-            this.btn_dgvtc_down.Text = "Down";
-            this.btn_dgvtc_down.UseVisualStyleBackColor = true;
-            this.btn_dgvtc_down.Visible = false;
+            this.button3.Location = new System.Drawing.Point(217, 63);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(118, 21);
+            this.button3.TabIndex = 16;
+            this.button3.Text = "Load";
+            this.button3.UseVisualStyleBackColor = true;
             // 
-            // btn_dgvtc_delete
+            // label10
             // 
-            this.btn_dgvtc_delete.Location = new System.Drawing.Point(291, 141);
-            this.btn_dgvtc_delete.Name = "btn_dgvtc_delete";
-            this.btn_dgvtc_delete.Size = new System.Drawing.Size(48, 24);
-            this.btn_dgvtc_delete.TabIndex = 9;
-            this.btn_dgvtc_delete.Text = "Delete";
-            this.btn_dgvtc_delete.UseVisualStyleBackColor = true;
-            this.btn_dgvtc_delete.Visible = false;
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(6, 67);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(39, 13);
+            this.label10.TabIndex = 17;
+            this.label10.Text = "Defect";
             // 
-            // btn_doneEdit
+            // label11
             // 
-            this.btn_doneEdit.Location = new System.Drawing.Point(291, 53);
-            this.btn_doneEdit.Name = "btn_doneEdit";
-            this.btn_doneEdit.Size = new System.Drawing.Size(48, 24);
-            this.btn_doneEdit.TabIndex = 10;
-            this.btn_doneEdit.Text = "Done";
-            this.btn_doneEdit.UseVisualStyleBackColor = true;
-            this.btn_doneEdit.Visible = false;
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(6, 40);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(52, 13);
+            this.label11.TabIndex = 18;
+            this.label11.Text = "TestCase";
             // 
             // CustomFieldConfig
             // 
@@ -486,7 +579,7 @@
         private System.Windows.Forms.ListBox lst_Otptions;
         private System.Windows.Forms.Panel customFieldsPanel;
         private System.Windows.Forms.Panel panel_TestCaseFields;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button btn_SaveTemplate;
         private System.Windows.Forms.Button cancelUpdate;
         private System.Windows.Forms.Button btn_applyUseTemplate;
         private System.Windows.Forms.Label label9;
@@ -497,5 +590,13 @@
         private System.Windows.Forms.Button btn_dgvtc_up;
         private System.Windows.Forms.Button btn_dgvtc_Edit;
         private System.Windows.Forms.Button btn_doneEdit;
+        private System.Windows.Forms.Button btn_LoadTCTemplate;
+        private System.Windows.Forms.Button btn_dgv_addRow;
+        private System.Windows.Forms.Button btn_getTCFromProject;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }
