@@ -333,12 +333,14 @@
             // 
             // btn_saveTemplateAs
             // 
+            this.btn_saveTemplateAs.Enabled = false;
             this.btn_saveTemplateAs.Location = new System.Drawing.Point(180, 389);
             this.btn_saveTemplateAs.Name = "btn_saveTemplateAs";
             this.btn_saveTemplateAs.Size = new System.Drawing.Size(76, 23);
             this.btn_saveTemplateAs.TabIndex = 19;
             this.btn_saveTemplateAs.Text = "Save As";
             this.btn_saveTemplateAs.UseVisualStyleBackColor = true;
+            this.btn_saveTemplateAs.Click += new System.EventHandler(this.btn_saveTemplateAs_Click);
             // 
             // label11
             // 
@@ -475,12 +477,14 @@
             // 
             // btn_SaveTemplate
             // 
+            this.btn_SaveTemplate.Enabled = false;
             this.btn_SaveTemplate.Location = new System.Drawing.Point(99, 389);
             this.btn_SaveTemplate.Name = "btn_SaveTemplate";
             this.btn_SaveTemplate.Size = new System.Drawing.Size(76, 23);
             this.btn_SaveTemplate.TabIndex = 5;
             this.btn_SaveTemplate.Text = "Save";
             this.btn_SaveTemplate.UseVisualStyleBackColor = true;
+            this.btn_SaveTemplate.Click += new System.EventHandler(this.btn_SaveTemplate_Click);
             // 
             // cancelUpdate
             // 

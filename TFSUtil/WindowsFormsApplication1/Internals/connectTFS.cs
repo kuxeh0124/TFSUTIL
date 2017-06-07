@@ -10,7 +10,14 @@ namespace TFSUtil.Internals
 {
     class connectTFS
     {
+        /// <summary>
+        /// Initiate the connection to the TFS server using the TeamProjectPicker built in library.
+        /// </summary>
         public static TeamProjectPicker tfsPP = new TeamProjectPicker(TeamProjectPickerMode.SingleProject, false, new UICredentialsProvider());
+
+        /// <summary>
+        /// Connects to the serves
+        /// </summary>
         public static void connectToTFS()
         {
             Uri tfsUri = null;
@@ -24,7 +31,10 @@ namespace TFSUtil.Internals
             }
             catch { }            
         }
-
+        
+        /// <summary>
+        /// Returns the team project collection
+        /// </summary>
         public static TfsTeamProjectCollection myTfsTeamProjectCollection
         {
             get
@@ -33,6 +43,9 @@ namespace TFSUtil.Internals
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static ITestManagementService tfsService
         {
             get
@@ -48,6 +61,9 @@ namespace TFSUtil.Internals
             }
         }
 
+        /// <summary>
+        /// returns the name of the connected team projecs
+        /// </summary>
         public static ITestManagementTeamProject tfsTeamProject
         {
             get

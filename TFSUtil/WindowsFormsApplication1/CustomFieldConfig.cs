@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 using System.Xml.Linq;
 using TFSUtil.Internals;
 
@@ -235,25 +236,30 @@ namespace TFSUtil
 
         private void btn_applyUseTemplate_Click(object sender, EventArgs e)
         {
-            string getComboValue = combo_tcTemplatelist.SelectedValue.ToString();
-            string nameLabel = "";
-            getComboValue = getComboValue.Substring(getComboValue.LastIndexOf("\\") + 1);
-            //Internals.Globals.getTestCaseFieldsFromSetting = getComboValue.Substring(0, getComboValue.Length-4);
-            if (getComboValue.Contains("TestCase"))
+            if (!btn_doneEdit.Visible)
             {
-                Internals.Globals.getTestCaseFieldsFromSetting = getComboValue.Substring(0, getComboValue.Length - 4);
-                nameLabel = "TestCase";
-            }
-            else if (getComboValue.Contains("Defect"))
-            {
-                Internals.Globals.getDefectFieldsFromSetting = getComboValue.Substring(0, getComboValue.Length - 4);
-                nameLabel = "Defect";
-            }
+                string getComboValue = combo_tcTemplatelist.SelectedValue.ToString();
+                string nameLabel = "";
+                getComboValue = getComboValue.Substring(getComboValue.LastIndexOf("\\") + 1);
+                //Internals.Globals.getTestCaseFieldsFromSetting = getComboValue.Substring(0, getComboValue.Length-4);
+                if (getComboValue.Contains("TestCase"))
+                {
+                    Internals.Globals.getTestCaseFieldsFromSetting = getComboValue.Substring(0, getComboValue.Length - 4);
+                    nameLabel = "TestCase";
+                }
+                else if (getComboValue.Contains("Defect"))
+                {
+                    Internals.Globals.getDefectFieldsFromSetting = getComboValue.Substring(0, getComboValue.Length - 4);
+                    nameLabel = "Defect";
+                }
 
-            MessageBox.Show("Templates Used\n\nDefect      : " + Internals.Globals.getDefectFieldsFromSetting + ".xml\nTest Case : " + Internals.Globals.getTestCaseFieldsFromSetting + ".xml");
+                Globals.DisplayErrorMessage("Current Templates Used\n\nDefect      : " + 
+                    Internals.Globals.getDefectFieldsFromSetting + ".xml\nTest Case : " + 
+                    Internals.Globals.getTestCaseFieldsFromSetting + ".xml", "Current templates loaded", 2);
 
-            //removeLabels(nameLabel);
-            //AddCurrentLabels();
+                    //removeLabels(nameLabel);
+                    //AddCurrentLabels();
+            }
         }
 
         private void removeLabels(string testCaseOrDefect)
@@ -317,6 +323,7 @@ namespace TFSUtil
 
         private void btn_load_DefectFields_Click(object sender, EventArgs e)
         {
+            Globals.isTestCase = false;
             btn_SaveTemplate.Enabled = true;
             btn_saveTemplateAs.Enabled = false;
             dgv_TestCaseFields.Rows.Clear();
@@ -324,6 +331,7 @@ namespace TFSUtil
         }
         private void btn_LoadTCTemplate_Click(object sender, EventArgs e)
         {
+            Globals.isTestCase = true;
             btn_SaveTemplate.Enabled = true;
             btn_saveTemplateAs.Enabled = false;
             dgv_TestCaseFields.Rows.Clear();
@@ -474,37 +482,47 @@ namespace TFSUtil
         }
         private void btn_getTCFromProject_Click(object sender, EventArgs e)
         {
-            dgv_TestCaseFields.Rows.Clear();
-            btn_SaveTemplate.Enabled = false;
-            btn_saveTemplateAs.Enabled = true;
-            DataGridViewTextBoxColumn tf = new DataGridViewTextBoxColumn();
-            tf.HeaderText = "Fields";
-            tf.DataPropertyName = "Fields";
-            tf.ReadOnly = true;
-            tf.Width = 255;
-            tf.SortMode = DataGridViewColumnSortMode.NotSortable;
-
-            dgv_TestCaseFields.Columns.Add(tf);
-
-            DataGridViewRowCollection rows = dgv_TestCaseFields.Rows;
-            WorkItemType fromWI = null;
-            if (combo_tempLoadFromProject.Text == "Test Case")
+            if (combo_tempLoadFromProject.Text.Length > 0)
             {
-                loadFieldsFromProject(tcWIType);
-                returnFields.Add("Test Outcome");
-                returnFields.Add("Date Completed");
-                returnFields.Add("Step No");
-                returnFields.Add("Step Title");
-                returnFields.Add("Step Expected Results");
+                dgv_TestCaseFields.Rows.Clear();
+                dgv_TestCaseFields.Columns.Clear();
+                btn_SaveTemplate.Enabled = false;
+                btn_saveTemplateAs.Enabled = true;
+                DataGridViewTextBoxColumn tf = new DataGridViewTextBoxColumn();
+                tf.HeaderText = "Fields";
+                tf.DataPropertyName = "Fields";
+                tf.ReadOnly = true;
+                tf.Width = 255;
+                tf.SortMode = DataGridViewColumnSortMode.NotSortable;
+
+                dgv_TestCaseFields.Columns.Add(tf);
+
+                DataGridViewRowCollection rows = dgv_TestCaseFields.Rows;
+                WorkItemType fromWI = null;
+                if (combo_tempLoadFromProject.Text == "Test Case")
+                {
+                    Globals.isTestCase = true;
+                    loadFieldsFromProject(tcWIType);
+                    returnFields.Add("Test Outcome");
+                    returnFields.Add("Date Completed");
+                    returnFields.Add("Step No");
+                    returnFields.Add("Step Title");
+                    returnFields.Add("Step Expected Results");
+                }
+                else if (combo_tempLoadFromProject.Text == "Defect")
+                {
+                    Globals.isTestCase = false;
+                    loadFieldsFromProject(bugWIType);
+                }
+
+                for (int x = 0; x <= returnFields.Count - 1; x++)
+                {
+                    rows.Add(new string[] { returnFields[x] });
+                }
             }
-            else if(combo_tempLoadFromProject.Text == "Defect")
+            else
             {
-                loadFieldsFromProject(bugWIType);
-            }
-
-            for (int x = 0; x <= returnFields.Count- 1; x++)
-            {
-                rows.Add(new string[] { returnFields[x] });
+                Globals.DisplayErrorMessage("Please select a type of template to load", "Template Type blank", 1);
             }
         }
 
@@ -532,6 +550,88 @@ namespace TFSUtil
             {
                 return Globals.workItemTypes["Bug"];
             }
+        }
+
+        private void btn_SaveTemplate_Click(object sender, EventArgs e)
+        {
+            customFieldsSaveXML(false);
+        }
+        private void customFieldsSaveXML(bool saveNew)
+        {
+            try
+            {
+                if (!btn_doneEdit.Visible)
+                {
+                    List<string> getList = new List<string>();
+                    string fileName = "";
+                    if (saveNew)
+                    {
+                        if (Globals.isTestCase)
+                        {
+                            fileName = "TestCaseFields_";
+                            fileName = fileName + Microsoft.VisualBasic.Interaction.InputBox("Please enter a name for your template") + ".xml";
+                        }
+                        else
+                        {
+                            fileName = "DefectFields";
+                            fileName = fileName + Microsoft.VisualBasic.Interaction.InputBox("Please enter a name for your template") + ".xml";
+                        }
+                    }
+                    else
+                    {
+                        if (Globals.isTestCase)
+                        {
+                            fileName = combo_tcTemplatelist.Text;
+                        }
+                        else
+                        {
+                            fileName = combo_defectTempalteList.Text;
+                        }
+                    }
+
+                    foreach (DataGridViewRow getRow in dgv_TestCaseFields.Rows)
+                    {
+                        getList.Add(getRow.Cells[0].Value.ToString());
+                    }
+
+                    var xmlDoc = new XDocument(new XDeclaration("1.0", "utf-8", null));
+
+                    XElement xmlElements = new XElement("Root",
+                                                getList.Select(i =>
+                                                            new XElement("Row",
+                                                                    new XElement("Field", i))
+                                                )
+                                           );
+                    xmlDoc.Add(xmlElements);
+                    XmlWriterSettings settings = new XmlWriterSettings();
+                    settings.Indent = true;
+                    settings.IndentChars = "\t";
+                    using (var writer = XmlTextWriter.Create(@"References\" + fileName, settings))
+                    {
+                        xmlDoc.Save(writer);
+                    }
+                    Globals.DisplayErrorMessage("Successfully created/updated the template xml file!", "Success", 2);
+                    loadTemplateXMLs();
+                    loadTemplateComboBox();
+                }
+                else
+                {
+                    Globals.DisplayErrorMessage("Please complete your editing first before saving", "Cannot save", 1);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Globals.DisplayErrorMessage("There was an error on funtion "
+                    + Globals.GetCurrentMethod() + ":\n" + ex.GetType().ToString() +
+                    "n\nPlease contact administrator", "Error", 1);
+            }
+
+        }
+
+        private void btn_saveTemplateAs_Click(object sender, EventArgs e)
+        {
+            customFieldsSaveXML(true);
         }
     }
 }

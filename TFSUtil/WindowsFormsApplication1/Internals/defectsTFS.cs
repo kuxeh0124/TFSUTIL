@@ -33,12 +33,10 @@ namespace TFSUtil.Internals
         public static string getSuccess { get; set; }
         public static string getTotalUpload { get; set; }
         
-        //WorkItemStore workItemStore = connectTFS.myTfsTeamProjectCollection.GetService<WorkItemStore>();
-        //Project getProjectCol = workItemStore.Projects[connectTFS.tfsTeamProject.TeamProjectName];
-        //WorkItemTypeCollection workItemTypes = getProjectCol.WorkItemTypes;
-        //WorkItemType workItemType = workItemTypes["Bug"];
 
-
+        /// <summary>
+        /// Gets all the defect fields from the xml template
+        /// </summary>
         public void getTFSDefectFields()
         {
             WorkItem workItem = new WorkItem(workItemType);
@@ -85,6 +83,12 @@ namespace TFSUtil.Internals
             }
         }
 
+        /// <summary>
+        /// Gets the query from the query folder of the user that is using the tool
+        /// </summary>
+        /// <param name="folder"></param>
+        /// <param name="queryName"></param>
+        /// <returns></returns>
         private static Guid FindQuery(QueryFolder folder, string queryName)
         {
             foreach (var item in folder)
@@ -107,6 +111,11 @@ namespace TFSUtil.Internals
             return Guid.Empty;
         }
 
+        /// <summary>
+        /// Adds custom LOVs for the template excel file
+        /// </summary>
+        /// <param name="dField"></param>
+        /// <param name="vals"></param>
         private void processCustomListItems(Field dField, List<string> vals)
         {
             if (dField.Name == "State")
@@ -153,6 +162,9 @@ namespace TFSUtil.Internals
             }
         }
 
+        /// <summary>
+        /// Loads the defect fields into list
+        /// </summary>
         public void loadXMLDefectFields()
         {
             XDocument xdoc = XDocument.Load(@"References\" + Globals.getDefectFieldsFromSetting + ".xml");
@@ -167,6 +179,9 @@ namespace TFSUtil.Internals
             }
         }
 
+        /// <summary>
+        /// Loads the defect fields into a list to be used for validation
+        /// </summary>
         public void loadXMLDefectFieldsForValidation()
         {
             XDocument xdoc = XDocument.Load(@"References\" + Globals.getDefectFieldsFromSetting + ".xml");
@@ -182,6 +197,11 @@ namespace TFSUtil.Internals
             }
         }
 
+        
+        /// <summary>
+        /// Loads the excel file into TFS
+        /// </summary>
+        /// <param name="fileName"></param>
         public void loadIntoTFS(string fileName)
         {
             //Dictionary<string[], string[]> dicDefectDetails = new Dictionary<string[], string[]>();
