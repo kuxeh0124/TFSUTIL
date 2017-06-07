@@ -78,7 +78,7 @@ namespace TFSUtil.Internals
 
             while(xlApp.Visible)
             {
-                string foo = "bar";
+                //string foo = "bar";
             }
             ReleaseExcel(wb, null, xlApp);
         }

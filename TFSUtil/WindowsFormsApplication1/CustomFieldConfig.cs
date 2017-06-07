@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.TeamFoundation.WorkItemTracking.Client;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,11 +18,14 @@ namespace TFSUtil
     public partial class CustomFieldConfig : Form
     {
         Dictionary<string,string> xmlItems = new Dictionary<string, string>();
+        Dictionary<string, string> xmlItemsDefect = new Dictionary<string, string>();        
+        List<string> returnFields = new List<string>();
         public CustomFieldConfig()
         {
             InitializeComponent();
             loadValues();
             loadTemplateXMLs();
+            enableLoadFromTFS();
         }
 
         private void loadValues()
@@ -80,13 +84,13 @@ namespace TFSUtil
             //combo_tcTemplatelist.SelectedIndex = 0;
         }
 
-        private void loadTestCaseFields()
+        private void loadTestCaseFields(string listFrom)
         {
             dgv_TestCaseFields.DataSource = null;
             dgv_TestCaseFields.Rows.Clear();
             dgv_TestCaseFields.Refresh();
             testmanTFS tm = new testmanTFS();
-            tm.loadXMLTCFields(combo_tcTemplatelist.Text);
+            tm.loadXMLTCFields(listFrom);
             //Load fields here
             //DataTable dt = new DataTable();
             //dt.Columns.Add("TestCaseFields", typeof(string));
@@ -177,18 +181,31 @@ namespace TFSUtil
             combo_tcTemplatelist.DataSource = new BindingSource(xmlItems, null);
             combo_tcTemplatelist.DisplayMember = "Value";
             combo_tcTemplatelist.ValueMember = "Key";
+            combo_defectTempalteList.DataSource = new BindingSource(xmlItemsDefect, null);
+            combo_defectTempalteList.DisplayMember = "Value";
+            combo_defectTempalteList.ValueMember = "Key";
         }
 
         private void loadTemplateXMLs()
         {
             xmlItems.Clear();
             
-            IEnumerable<string> dirs = Directory.GetFiles(@"References\").Where(file => Regex.IsMatch(file, "[Defect|TestCase]Fields.*"));
+            IEnumerable<string> dirs = Directory.GetFiles(@"References\").Where(file => Regex.IsMatch(file, "TestCaseFields.*xml"));
             //            string[] dirs = Directory.GetFiles(@"References\", "DefectFields*.xml, TestCaseFields*.xml");           
             foreach (string dir in dirs)
             {
                 xmlItems.Add(dir, dir.Substring(dir.LastIndexOf("\\")+1));
             }
+
+            xmlItemsDefect.Clear();
+
+            IEnumerable<string> dirsDefect = Directory.GetFiles(@"References\").Where(file => Regex.IsMatch(file, "DefectFields.*xml"));
+            //            string[] dirs = Directory.GetFiles(@"References\", "DefectFields*.xml, TestCaseFields*.xml");           
+            foreach (string dir in dirsDefect)
+            {
+                xmlItemsDefect.Add(dir, dir.Substring(dir.LastIndexOf("\\") + 1));
+            }
+
         }
 
         private void txt_TextField2_TextChanged(object sender, EventArgs e)
@@ -233,6 +250,8 @@ namespace TFSUtil
                 nameLabel = "Defect";
             }
 
+            MessageBox.Show("Templates Used\n\nDefect      : " + Internals.Globals.getDefectFieldsFromSetting + ".xml\nTest Case : " + Internals.Globals.getTestCaseFieldsFromSetting + ".xml");
+
             //removeLabels(nameLabel);
             //AddCurrentLabels();
         }
@@ -272,7 +291,7 @@ namespace TFSUtil
                 btn_dgvtc_up.Visible = true;
                 btn_dgvtc_down.Visible = true;
                 btn_dgvtc_delete.Visible = true;
-                btn_dgv_addRow.Visible = true;
+                btn_dgv_addRow.Visible = false;
                 btn_dgvtc_Edit.Visible = false;
                 foreach (DataGridViewRow row in dgv_TestCaseFields.Rows)
                 {
@@ -296,9 +315,19 @@ namespace TFSUtil
             
         }
 
+        private void btn_load_DefectFields_Click(object sender, EventArgs e)
+        {
+            btn_SaveTemplate.Enabled = true;
+            btn_saveTemplateAs.Enabled = false;
+            dgv_TestCaseFields.Rows.Clear();
+            loadTestCaseFields(combo_defectTempalteList.Text);
+        }
         private void btn_LoadTCTemplate_Click(object sender, EventArgs e)
         {
-            loadTestCaseFields();
+            btn_SaveTemplate.Enabled = true;
+            btn_saveTemplateAs.Enabled = false;
+            dgv_TestCaseFields.Rows.Clear();
+            loadTestCaseFields(combo_tcTemplatelist.Text);
         }
 
         private void btn_doneEdit_Click(object sender, EventArgs e)
@@ -337,7 +366,8 @@ namespace TFSUtil
             {
                 foreach (DataGridViewCell cell in row.Cells)
                 {
-                    if (!Convert.ToString(cell.Value).Contains("Step"))
+                    if (!Convert.ToString(cell.Value).Contains("Step") && !Convert.ToString(cell.Value).Contains("Date Completed") 
+                        && !Convert.ToString(cell.Value).Contains("Test Outcome"))
                     {
                         cell.ReadOnly = true;
                     }
@@ -351,13 +381,15 @@ namespace TFSUtil
 
         private void btn_dgvtc_up_Click(object sender, EventArgs e)
         {                            
-            dgv_TestCaseFields.EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2;
+            dgv_TestCaseFields.EditMode = DataGridViewEditMode.EditProgrammatically;
             DataGridViewRowCollection rows = dgv_TestCaseFields.Rows;            
             int getIndex = dgv_TestCaseFields.SelectedCells[0].OwningRow.Index;
             if (getIndex != 0)
             {
                 DataGridViewRow rowToRemove = rows[getIndex - 1];
-                if (!dgv_TestCaseFields.Rows[getIndex].Cells[0].Value.ToString().Contains("Step"))
+                if (!dgv_TestCaseFields.Rows[getIndex].Cells[0].Value.ToString().Contains("Step") &&
+                    !dgv_TestCaseFields.Rows[getIndex].Cells[0].Value.ToString().Contains("Date Completed") &&
+                    !dgv_TestCaseFields.Rows[getIndex].Cells[0].Value.ToString().Contains("Test Outcome"))
                 {
                     rows.Remove(rowToRemove);
                     rows.Insert(getIndex, rowToRemove);
@@ -368,15 +400,19 @@ namespace TFSUtil
 
         private void btn_dgvtc_down_Click(object sender, EventArgs e)
         {
-            dgv_TestCaseFields.EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2;
+            dgv_TestCaseFields.EditMode = DataGridViewEditMode.EditProgrammatically;
             DataGridViewRowCollection rows = dgv_TestCaseFields.Rows;
             int getIndex = dgv_TestCaseFields.SelectedCells[0].OwningRow.Index;
             if (getIndex != rows.Count)
             {
                 DataGridViewRow rowToRemove = rows[getIndex + 1];
-                if (!dgv_TestCaseFields.Rows[getIndex].Cells[0].Value.ToString().Contains("Step"))
+                if (!dgv_TestCaseFields.Rows[getIndex].Cells[0].Value.ToString().Contains("Step") &&
+                    !dgv_TestCaseFields.Rows[getIndex].Cells[0].Value.ToString().Contains("Date Completed") &&
+                    !dgv_TestCaseFields.Rows[getIndex].Cells[0].Value.ToString().Contains("Test Outcome"))
                 {
-                    if(!dgv_TestCaseFields.Rows[getIndex+1].Cells[0].Value.ToString().Contains("Step"))
+                    if (!dgv_TestCaseFields.Rows[getIndex+1].Cells[0].Value.ToString().Contains("Step") &&
+                        !dgv_TestCaseFields.Rows[getIndex+1].Cells[0].Value.ToString().Contains("Date Completed") &&
+                        !dgv_TestCaseFields.Rows[getIndex+1].Cells[0].Value.ToString().Contains("Test Outcome"))
                     {
                         rows.Remove(rowToRemove);
                         rows.Insert(getIndex, rowToRemove);
@@ -388,10 +424,13 @@ namespace TFSUtil
 
         private void btn_dgvtc_delete_Click(object sender, EventArgs e)
         {
-            dgv_TestCaseFields.EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2;
+            dgv_TestCaseFields.EditMode = DataGridViewEditMode.EditProgrammatically;
             DataGridViewRowCollection rows = dgv_TestCaseFields.Rows;
-            int getIndex = dgv_TestCaseFields.SelectedCells[0].OwningRow.Index;            
-            if (!dgv_TestCaseFields.Rows[getIndex].Cells[0].Value.ToString().Contains("Step"))
+            int getIndex = dgv_TestCaseFields.SelectedCells[0].OwningRow.Index;
+            if (!dgv_TestCaseFields.Rows[getIndex].Cells[0].Value.ToString().Contains("Step") &&
+                !dgv_TestCaseFields.Rows[getIndex].Cells[0].Value.ToString().Contains("Date Completed") &&
+                !dgv_TestCaseFields.Rows[getIndex].Cells[0].Value.ToString().Contains("Test Outcome") ||
+                dgv_TestCaseFields.Rows[getIndex].Cells[0].Value.ToString().Equals("Steps"))
             {
                 rows.Remove(rows[getIndex]);
             }
@@ -400,19 +439,99 @@ namespace TFSUtil
 
         private void btn_dgv_addRow_Click(object sender, EventArgs e)
         {
-            dgv_TestCaseFields.EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2;
+            dgv_TestCaseFields.EditMode = DataGridViewEditMode.EditProgrammatically;
             DataGridViewRowCollection rows = dgv_TestCaseFields.Rows;
             int getIndex = dgv_TestCaseFields.SelectedCells[0].OwningRow.Index;
             if (getIndex != 0)
             {
                 DataGridViewRow rowToRemove = rows[getIndex + 1];
-                if (!dgv_TestCaseFields.Rows[getIndex].Cells[0].Value.ToString().Contains("Step"))
+                if (!dgv_TestCaseFields.Rows[getIndex].Cells[0].Value.ToString().Contains("Step") &&
+                    !dgv_TestCaseFields.Rows[getIndex].Cells[0].Value.ToString().Contains("Date Completed") &&
+                    !dgv_TestCaseFields.Rows[getIndex].Cells[0].Value.ToString().Contains("Test Outcome"))
                 {
                     //rows.Remove(rowToRemove);
                     rows.Insert(getIndex, "");                   
                 }
             }
             disableStepEditing();
+        }
+
+        private void cancelUpdate_Click(object sender, EventArgs e)
+        {
+            this.Close();   
+        }
+
+        private void enableLoadFromTFS()
+        {
+            if (Globals.isConnected)
+            {
+                btn_getTCFromProject.Enabled = true;
+            }
+            else
+            {
+                btn_getTCFromProject.Enabled = false;
+            }
+        }
+        private void btn_getTCFromProject_Click(object sender, EventArgs e)
+        {
+            dgv_TestCaseFields.Rows.Clear();
+            btn_SaveTemplate.Enabled = false;
+            btn_saveTemplateAs.Enabled = true;
+            DataGridViewTextBoxColumn tf = new DataGridViewTextBoxColumn();
+            tf.HeaderText = "Fields";
+            tf.DataPropertyName = "Fields";
+            tf.ReadOnly = true;
+            tf.Width = 255;
+            tf.SortMode = DataGridViewColumnSortMode.NotSortable;
+
+            dgv_TestCaseFields.Columns.Add(tf);
+
+            DataGridViewRowCollection rows = dgv_TestCaseFields.Rows;
+            WorkItemType fromWI = null;
+            if (combo_tempLoadFromProject.Text == "Test Case")
+            {
+                loadFieldsFromProject(tcWIType);
+                returnFields.Add("Test Outcome");
+                returnFields.Add("Date Completed");
+                returnFields.Add("Step No");
+                returnFields.Add("Step Title");
+                returnFields.Add("Step Expected Results");
+            }
+            else if(combo_tempLoadFromProject.Text == "Defect")
+            {
+                loadFieldsFromProject(bugWIType);
+            }
+
+            for (int x = 0; x <= returnFields.Count- 1; x++)
+            {
+                rows.Add(new string[] { returnFields[x] });
+            }
+        }
+
+        private void loadFieldsFromProject(WorkItemType getWI)
+        {            
+            WorkItem workItem = new WorkItem(getWI);
+            returnFields.Clear();
+            foreach (Field dField in workItem.Fields)
+            {
+                if (dField.Name != "Steps") { returnFields.Add(dField.Name); }                
+            }            
+        }
+
+        public static WorkItemType tcWIType
+        {
+            get
+            {
+                return Globals.workItemTypes["Test Case"];
+            }
+        }
+
+        public static WorkItemType bugWIType
+        {
+            get
+            {
+                return Globals.workItemTypes["Bug"];
+            }
         }
     }
 }

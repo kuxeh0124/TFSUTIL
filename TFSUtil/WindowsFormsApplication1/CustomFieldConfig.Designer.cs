@@ -51,6 +51,12 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.lst_Otptions = new System.Windows.Forms.ListBox();
             this.panel_TestCaseFields = new System.Windows.Forms.Panel();
+            this.btn_saveTemplateAs = new System.Windows.Forms.Button();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.btn_load_DefectFields = new System.Windows.Forms.Button();
+            this.combo_defectTempalteList = new System.Windows.Forms.ComboBox();
+            this.combo_tempLoadFromProject = new System.Windows.Forms.ComboBox();
             this.btn_getTCFromProject = new System.Windows.Forms.Button();
             this.btn_dgv_addRow = new System.Windows.Forms.Button();
             this.btn_LoadTCTemplate = new System.Windows.Forms.Button();
@@ -66,11 +72,6 @@
             this.combo_tcTemplatelist = new System.Windows.Forms.ComboBox();
             this.dgv_TestCaseFields = new System.Windows.Forms.DataGridView();
             this.customFieldsPanel = new System.Windows.Forms.Panel();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
-            this.button3 = new System.Windows.Forms.Button();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -305,11 +306,12 @@
             // panel_TestCaseFields
             // 
             this.panel_TestCaseFields.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_TestCaseFields.Controls.Add(this.btn_saveTemplateAs);
             this.panel_TestCaseFields.Controls.Add(this.label11);
             this.panel_TestCaseFields.Controls.Add(this.label10);
-            this.panel_TestCaseFields.Controls.Add(this.button3);
-            this.panel_TestCaseFields.Controls.Add(this.comboBox2);
-            this.panel_TestCaseFields.Controls.Add(this.comboBox1);
+            this.panel_TestCaseFields.Controls.Add(this.btn_load_DefectFields);
+            this.panel_TestCaseFields.Controls.Add(this.combo_defectTempalteList);
+            this.panel_TestCaseFields.Controls.Add(this.combo_tempLoadFromProject);
             this.panel_TestCaseFields.Controls.Add(this.btn_getTCFromProject);
             this.panel_TestCaseFields.Controls.Add(this.btn_dgv_addRow);
             this.panel_TestCaseFields.Controls.Add(this.btn_LoadTCTemplate);
@@ -329,6 +331,62 @@
             this.panel_TestCaseFields.Size = new System.Drawing.Size(347, 424);
             this.panel_TestCaseFields.TabIndex = 10;
             // 
+            // btn_saveTemplateAs
+            // 
+            this.btn_saveTemplateAs.Location = new System.Drawing.Point(180, 389);
+            this.btn_saveTemplateAs.Name = "btn_saveTemplateAs";
+            this.btn_saveTemplateAs.Size = new System.Drawing.Size(76, 23);
+            this.btn_saveTemplateAs.TabIndex = 19;
+            this.btn_saveTemplateAs.Text = "Save As";
+            this.btn_saveTemplateAs.UseVisualStyleBackColor = true;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(6, 40);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(52, 13);
+            this.label11.TabIndex = 18;
+            this.label11.Text = "TestCase";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(6, 67);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(39, 13);
+            this.label10.TabIndex = 17;
+            this.label10.Text = "Defect";
+            // 
+            // btn_load_DefectFields
+            // 
+            this.btn_load_DefectFields.Location = new System.Drawing.Point(217, 63);
+            this.btn_load_DefectFields.Name = "btn_load_DefectFields";
+            this.btn_load_DefectFields.Size = new System.Drawing.Size(118, 21);
+            this.btn_load_DefectFields.TabIndex = 16;
+            this.btn_load_DefectFields.Text = "Load";
+            this.btn_load_DefectFields.UseVisualStyleBackColor = true;
+            this.btn_load_DefectFields.Click += new System.EventHandler(this.btn_load_DefectFields_Click);
+            // 
+            // combo_defectTempalteList
+            // 
+            this.combo_defectTempalteList.FormattingEnabled = true;
+            this.combo_defectTempalteList.Location = new System.Drawing.Point(63, 63);
+            this.combo_defectTempalteList.Name = "combo_defectTempalteList";
+            this.combo_defectTempalteList.Size = new System.Drawing.Size(148, 21);
+            this.combo_defectTempalteList.TabIndex = 15;
+            // 
+            // combo_tempLoadFromProject
+            // 
+            this.combo_tempLoadFromProject.FormattingEnabled = true;
+            this.combo_tempLoadFromProject.Items.AddRange(new object[] {
+            "Test Case",
+            "Defect"});
+            this.combo_tempLoadFromProject.Location = new System.Drawing.Point(63, 9);
+            this.combo_tempLoadFromProject.Name = "combo_tempLoadFromProject";
+            this.combo_tempLoadFromProject.Size = new System.Drawing.Size(148, 21);
+            this.combo_tempLoadFromProject.TabIndex = 14;
+            // 
             // btn_getTCFromProject
             // 
             this.btn_getTCFromProject.Enabled = false;
@@ -338,10 +396,11 @@
             this.btn_getTCFromProject.TabIndex = 13;
             this.btn_getTCFromProject.Text = "Load From Project";
             this.btn_getTCFromProject.UseVisualStyleBackColor = true;
+            this.btn_getTCFromProject.Click += new System.EventHandler(this.btn_getTCFromProject_Click);
             // 
             // btn_dgv_addRow
             // 
-            this.btn_dgv_addRow.Location = new System.Drawing.Point(287, 178);
+            this.btn_dgv_addRow.Location = new System.Drawing.Point(287, 208);
             this.btn_dgv_addRow.Name = "btn_dgv_addRow";
             this.btn_dgv_addRow.Size = new System.Drawing.Size(48, 24);
             this.btn_dgv_addRow.TabIndex = 12;
@@ -373,7 +432,7 @@
             // 
             // btn_dgvtc_delete
             // 
-            this.btn_dgvtc_delete.Location = new System.Drawing.Point(287, 208);
+            this.btn_dgvtc_delete.Location = new System.Drawing.Point(287, 178);
             this.btn_dgvtc_delete.Name = "btn_dgvtc_delete";
             this.btn_dgvtc_delete.Size = new System.Drawing.Size(48, 24);
             this.btn_dgvtc_delete.TabIndex = 9;
@@ -416,7 +475,7 @@
             // 
             // btn_SaveTemplate
             // 
-            this.btn_SaveTemplate.Location = new System.Drawing.Point(178, 389);
+            this.btn_SaveTemplate.Location = new System.Drawing.Point(99, 389);
             this.btn_SaveTemplate.Name = "btn_SaveTemplate";
             this.btn_SaveTemplate.Size = new System.Drawing.Size(76, 23);
             this.btn_SaveTemplate.TabIndex = 5;
@@ -431,10 +490,11 @@
             this.cancelUpdate.TabIndex = 4;
             this.cancelUpdate.Text = "Cancel";
             this.cancelUpdate.UseVisualStyleBackColor = true;
+            this.cancelUpdate.Click += new System.EventHandler(this.cancelUpdate_Click);
             // 
             // btn_applyUseTemplate
             // 
-            this.btn_applyUseTemplate.Location = new System.Drawing.Point(95, 389);
+            this.btn_applyUseTemplate.Location = new System.Drawing.Point(17, 389);
             this.btn_applyUseTemplate.Name = "btn_applyUseTemplate";
             this.btn_applyUseTemplate.Size = new System.Drawing.Size(76, 23);
             this.btn_applyUseTemplate.TabIndex = 3;
@@ -454,7 +514,7 @@
             // combo_tcTemplatelist
             // 
             this.combo_tcTemplatelist.FormattingEnabled = true;
-            this.combo_tcTemplatelist.Location = new System.Drawing.Point(63, 9);
+            this.combo_tcTemplatelist.Location = new System.Drawing.Point(63, 37);
             this.combo_tcTemplatelist.Name = "combo_tcTemplatelist";
             this.combo_tcTemplatelist.Size = new System.Drawing.Size(148, 21);
             this.combo_tcTemplatelist.TabIndex = 1;
@@ -484,49 +544,6 @@
             this.customFieldsPanel.Size = new System.Drawing.Size(347, 424);
             this.customFieldsPanel.TabIndex = 0;
             this.customFieldsPanel.Visible = false;
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(63, 36);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(148, 21);
-            this.comboBox1.TabIndex = 14;
-            // 
-            // comboBox2
-            // 
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(63, 63);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(148, 21);
-            this.comboBox2.TabIndex = 15;
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(217, 63);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(118, 21);
-            this.button3.TabIndex = 16;
-            this.button3.Text = "Load";
-            this.button3.UseVisualStyleBackColor = true;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(6, 67);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(39, 13);
-            this.label10.TabIndex = 17;
-            this.label10.Text = "Defect";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(6, 40);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(52, 13);
-            this.label11.TabIndex = 18;
-            this.label11.Text = "TestCase";
             // 
             // CustomFieldConfig
             // 
@@ -595,8 +612,9 @@
         private System.Windows.Forms.Button btn_getTCFromProject;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.ComboBox comboBox2;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Button btn_load_DefectFields;
+        private System.Windows.Forms.ComboBox combo_defectTempalteList;
+        private System.Windows.Forms.ComboBox combo_tempLoadFromProject;
+        private System.Windows.Forms.Button btn_saveTemplateAs;
     }
 }

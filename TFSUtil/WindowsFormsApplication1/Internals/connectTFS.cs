@@ -37,7 +37,14 @@ namespace TFSUtil.Internals
         {
             get
             {
-                return myTfsTeamProjectCollection.GetService<ITestManagementService>();
+                try
+                {
+                    return myTfsTeamProjectCollection.GetService<ITestManagementService>();
+                }
+                catch
+                {
+                    return null;
+                }
             }
         }
 
@@ -45,7 +52,14 @@ namespace TFSUtil.Internals
         {
             get
             {
-                return tfsService.GetTeamProject(tfsPP.SelectedProjects[0].Name);
+                try
+                {
+                    return tfsService.GetTeamProject(tfsPP.SelectedProjects[0].Name);
+                }
+                catch
+                {
+                    return null;
+                }
             }
         }
     }

@@ -26,6 +26,7 @@ namespace TFSUtil.Internals
         public static string getTestPlan { get; set; }
         public static string getTestCaseFieldsFromSetting { get; set; }
         public static string getDefectFieldsFromSetting { get; set; }
+        public static bool isConnected { get; set; }
 
         public static string getRtmDestinationFile { get; set; }
         public static Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItemStore workItemStore

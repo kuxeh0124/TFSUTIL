@@ -15,8 +15,7 @@ using System.Threading;
 namespace TFSUtil
 {
     public partial class TFSUtilUI : Form
-    {
-        bool isConnected = false;
+    {       
         bool isExtactAll = false;
         Dictionary<string, string> dicTCToExtract = new Dictionary<string, string>();
 
@@ -24,11 +23,12 @@ namespace TFSUtil
         {
             InitializeComponent();
             Globals.loadSettings();
+            Globals.isConnected = false;
         }
 
         private void newConnectionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (isConnected)
+            if (Globals.isConnected)
             {
                 MessageBox.Show("Already Connected to " + connectTFS.tfsTeamProject.ToString() + "\n" 
                     + "Please switch projects if you need to connect to another project", "Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -134,11 +134,11 @@ namespace TFSUtil
         private void tfsConnectionHandler()
         {
             connectTFS.connectToTFS();
-            if (connectTFS.tfsTeamProject.ToString().Length > 0)
+            if (!String.IsNullOrEmpty(Convert.ToString(connectTFS.tfsTeamProject)))
             {
                 statusLbl_Connection.Text = "Connected";
                 statusLbl_ConnectionTM.Text = "Connected";
-                isConnected = true;
+                Globals.isConnected = true;
                 //Load Dropdowns
                 try
                 {
@@ -161,7 +161,7 @@ namespace TFSUtil
 
         private void switchProjectsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (isConnected)
+            if (Globals.isConnected)
             {
                 tfsConnectionHandler();
 
@@ -346,7 +346,7 @@ namespace TFSUtil
 
         private void btn_Upload_Click(object sender, EventArgs e)
         {
-            if (isConnected)
+            if (Globals.isConnected)
             {
                 processUpload();
             }
@@ -434,7 +434,7 @@ namespace TFSUtil
         //Test Mangement Objects
         private void btn_loadSuites_Click(object sender, EventArgs e)
         {
-            if (isConnected)
+            if (Globals.isConnected)
             {
                 testmanTFS tmTfs = new testmanTFS();
                 tmTfs.GetTestSuites(txt_SuiteNumber.Text);
