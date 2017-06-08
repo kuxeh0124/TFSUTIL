@@ -149,7 +149,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(7, 50);
+            this.label3.Location = new System.Drawing.Point(6, 50);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(56, 13);
             this.label3.TabIndex = 4;
@@ -157,7 +157,7 @@
             // 
             // txt_TextField3
             // 
-            this.txt_TextField3.Location = new System.Drawing.Point(69, 47);
+            this.txt_TextField3.Location = new System.Drawing.Point(68, 47);
             this.txt_TextField3.Name = "txt_TextField3";
             this.txt_TextField3.Size = new System.Drawing.Size(100, 20);
             this.txt_TextField3.TabIndex = 5;
@@ -227,7 +227,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(7, 51);
+            this.label6.Location = new System.Drawing.Point(6, 51);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(55, 13);
             this.label6.TabIndex = 4;
@@ -235,7 +235,7 @@
             // 
             // txt_Remarks3
             // 
-            this.txt_Remarks3.Location = new System.Drawing.Point(69, 48);
+            this.txt_Remarks3.Location = new System.Drawing.Point(68, 48);
             this.txt_Remarks3.Name = "txt_Remarks3";
             this.txt_Remarks3.Size = new System.Drawing.Size(100, 20);
             this.txt_Remarks3.TabIndex = 5;
@@ -326,7 +326,7 @@
             this.panel_TestCaseFields.Controls.Add(this.label9);
             this.panel_TestCaseFields.Controls.Add(this.combo_tcTemplatelist);
             this.panel_TestCaseFields.Controls.Add(this.dgv_TestCaseFields);
-            this.panel_TestCaseFields.Location = new System.Drawing.Point(4, 3);
+            this.panel_TestCaseFields.Location = new System.Drawing.Point(3, 0);
             this.panel_TestCaseFields.Name = "panel_TestCaseFields";
             this.panel_TestCaseFields.Size = new System.Drawing.Size(347, 424);
             this.panel_TestCaseFields.TabIndex = 10;

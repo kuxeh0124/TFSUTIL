@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using TFSUtil.Internals;
@@ -172,126 +173,148 @@ namespace TFSUtil.Internals
 
         public void LoadIntoTFS(string getPath)
         {
-            ExcelProcessing xlProc = new ExcelProcessing();
-            xlProc.readExcelDataForTC(getPath, "Testcase");
-            loadXMLTCFieldsForValidation();
-            
-            int getSteps = 0;
-            ITestCase getTc = null;
-            bool isNew = false;
-            int getExtract = 0;
-            if(xlProc.validateFileFormat(xmlTestCaseFieldsVal, getPath))
+            Thread getThread = new Thread(Globals.myWaitForm);
+            getThread.Start();
+            try
             {
-                foreach (Dictionary<string, string> dicFromListTC in xlProc.extractedTC)
-                {
-                    List<string> exp = new List<string>();
-                    List<string> title = new List<string>();
-                    List<string> stpno = new List<string>();
-                    foreach (KeyValuePair<string, string> entry in dicFromListTC.Reverse())
-                    {
-                        switch (Convert.ToString(entry.Key))
-                        {
-                            case "Test Plan":
-                                string getTestPlan = dicFromListTC["Test Plan"].Substring(0, dicFromListTC["Test Plan"].IndexOf(@"\"));
-                                string[] arrTestPlanLoc = dicFromListTC["Test Plan"].Split('\\');
-                                if (!validateTestPlanExist(getTestPlan))
-                                {
-                                    createTestPlan(getTestPlan);
-                                }
-                                createTestSuites(arrTestPlanLoc);
-                                break;
+                ExcelProcessing xlProc = new ExcelProcessing();
+                xlProc.readExcelDataForTC(getPath, "Testcase");
+                loadXMLTCFieldsForValidation();
 
-                            case "ID":
-                                if (string.IsNullOrEmpty(Convert.ToString(entry.Value)))
-                                {
-                                    ITestCase tc = connectTFS.tfsTeamProject.TestCases.Create();
-                                    getTc = tc;
-                                    isNew = true;
-                                }
-                                else
-                                {
-                                    ITestCase tc = connectTFS.tfsTeamProject.TestCases.Find(Convert.ToInt32(entry.Value));
-                                    getTc = tc;
-                                    getSteps = tc.Actions.Count;
-                                    isNew = false;
-                                }
-                                break;
-                            case "Step No":
-                            case "Step Title":
-                            case "Step Expected Result":
-                                if (Convert.ToString(entry.Key).Contains("No"))
-                                {
-                                    stpno = getSplitVals(entry.Value);
-                                }
-                                if (Convert.ToString(entry.Key).Contains("Title"))
-                                {
-                                    title = getSplitVals(entry.Value);
-                                }
-                                if (Convert.ToString(entry.Key).Contains("Expected Result"))
-                                {
-                                    exp = getSplitVals(entry.Value);
-                                }
-                                if (title.Count > 0 && exp.Count > 0)
-                                {
-                                    if (getSteps > stpno.Count)
-                                    {
-                                        int getStepDif = getSteps - stpno.Count;
-                                        for (int dif = 1; dif <= getStepDif; dif++)
-                                        {
-                                            getTc.Actions.RemoveAt(dif);                        
-                                        }
-                                    }
-                                    else if (getSteps < stpno.Count)
-                                    {
-                                        int getStepDif = stpno.Count - getSteps;
-                                        for (int dif = 1; dif <= getStepDif; dif++)
-                                        {
-                                            ITestStep newStep = getTc.CreateTestStep();
-                                            getTc.Actions.Add(newStep);
-                                        }
-                                    }
-                                    int stind = 0;
-                                    foreach (ITestAction testStep in getTc.Actions)
-                                    {
-                                        ITestStep ts = (ITestStep)testStep;
-                                        ts.Title = title[stind];
-                                        ts.ExpectedResult = exp[stind];
-                                        stind++;
-                                    }
-                                }
-                                break;
-                            case "SNo":
-                            case "Test Outcome":
-                            case "Date Completed":
-                                break;
-                            default:
-                                getTc.WorkItem.Fields[Convert.ToString(entry.Key)].Value = Convert.ToString(entry.Value);
-                                break;
-                        }
-                    }
-                    if (isNew)
+                int getSteps = 0;
+                ITestCase getTc = null;
+                bool isNew = false;
+                int getExtract = 0;
+                if (xlProc.validateFileFormat(xmlTestCaseFieldsVal, getPath))
+                {
+                    foreach (Dictionary<string, string> dicFromListTC in xlProc.extractedTC)
                     {
-                        try
+                        List<string> exp = new List<string>();
+                        List<string> title = new List<string>();
+                        List<string> stpno = new List<string>();
+                        foreach (KeyValuePair<string, string> entry in dicFromListTC.Reverse())
                         {
-                            IdAndName defaultConfigIdAndName = new IdAndName(defConfig.Id, defConfig.Name);
-                            currentTestSuite.SetDefaultConfigurations(new IdAndName[] { defaultConfigIdAndName });
+                            switch (Convert.ToString(entry.Key))
+                            {
+                                case "Test Plan":
+                                    string getTestPlan = dicFromListTC["Test Plan"].Substring(0, dicFromListTC["Test Plan"].IndexOf(@"\"));
+                                    string[] arrTestPlanLoc = dicFromListTC["Test Plan"].Split('\\');
+                                    if (!validateTestPlanExist(getTestPlan))
+                                    {
+                                        createTestPlan(getTestPlan);
+                                    }
+                                    createTestSuites(arrTestPlanLoc);
+                                    break;
+
+                                case "ID":
+                                    if (string.IsNullOrEmpty(Convert.ToString(entry.Value)))
+                                    {
+                                        ITestCase tc = connectTFS.tfsTeamProject.TestCases.Create();
+                                        getTc = tc;
+                                        isNew = true;
+                                    }
+                                    else
+                                    {
+                                        ITestCase tc = connectTFS.tfsTeamProject.TestCases.Find(Convert.ToInt32(entry.Value));
+                                        getTc = tc;
+                                        getSteps = tc.Actions.Count;
+                                        isNew = false;
+                                    }
+                                    break;
+                                case "Step No":
+                                case "Step Title":
+                                case "Step Expected Result":
+                                    if (Convert.ToString(entry.Key).Contains("No"))
+                                    {
+                                        stpno = getSplitVals(entry.Value);
+                                    }
+                                    if (Convert.ToString(entry.Key).Contains("Title"))
+                                    {
+                                        title = getSplitVals(entry.Value);
+                                    }
+                                    if (Convert.ToString(entry.Key).Contains("Expected Result"))
+                                    {
+                                        exp = getSplitVals(entry.Value);
+                                    }
+                                    if (title.Count > 0 && exp.Count > 0)
+                                    {
+                                        if (getSteps > stpno.Count)
+                                        {
+                                            int getStepDif = getSteps - stpno.Count;
+                                            for (int dif = 1; dif <= getStepDif; dif++)
+                                            {
+                                                getTc.Actions.RemoveAt(dif);
+                                            }
+                                        }
+                                        else if (getSteps < stpno.Count)
+                                        {
+                                            int getStepDif = stpno.Count - getSteps;
+                                            for (int dif = 1; dif <= getStepDif; dif++)
+                                            {
+                                                ITestStep newStep = getTc.CreateTestStep();
+                                                getTc.Actions.Add(newStep);
+                                            }
+                                        }
+                                        int stind = 0;
+                                        foreach (ITestAction testStep in getTc.Actions)
+                                        {
+                                            ITestStep ts = (ITestStep)testStep;
+                                            ts.Title = title[stind];
+                                            ts.ExpectedResult = exp[stind];
+                                            stind++;
+                                        }
+                                    }
+                                    break;
+                                case "SNo":
+                                case "Test Outcome":
+                                case "Date Completed":
+                                    break;
+                                default:
+                                    getTc.WorkItem.Fields[Convert.ToString(entry.Key)].Value = Convert.ToString(entry.Value);
+                                    break;
+                            }
+                        }
+                        if (isNew)
+                        {
+                            try
+                            {
+                                IdAndName defaultConfigIdAndName = new IdAndName(defConfig.Id, defConfig.Name);
+                                currentTestSuite.SetDefaultConfigurations(new IdAndName[] { defaultConfigIdAndName });
+                                getTc.Save();
+                                currentTestSuite.Entries.Add(getTc);
+                                currentTestPlan.Save();
+                                xlProc.updateTestCaseTestID(getPath, getTc.Id, xlProc.rowTestId[getExtract]);
+                            }
+                            catch (TestManagementValidationException tme)
+                            {
+                                //getThread.Abort();
+                                //Globals.DisplayErrorMessage("There may have been a problem with the TFS Validation\n" +
+                                //    "Please check your file if it uploads all mandatory fields", "Validation Issue", 1);
+                                Console.WriteLine(tme.ToString());
+                                Console.WriteLine(getTc.Title);
+                            }
+                        }
+                        else
+                        {
                             getTc.Save();
-                            currentTestSuite.Entries.Add(getTc);
-                            currentTestPlan.Save();
-                            xlProc.updateTestCaseTestID(getPath, getTc.Id, xlProc.rowTestId[getExtract]);
                         }
-                        catch (TestManagementValidationException tme)
-                        {
-                            Console.WriteLine(tme.ToString());
-                            Console.WriteLine(getTc.Title);
-                        }
+                        getExtract++;
                     }
-                    else
-                    {
-                        getTc.Save();
-                    }
-                    getExtract++;
+                    getThread.Abort();
+                    Globals.DisplayErrorMessage("Upload has completed", "Completed", 2);
                 }
+                else
+                {
+                    getThread.Abort();
+                    Globals.DisplayErrorMessage("Template Validation Failed.\n Please check your template for mandatory fields and wrong LOVs", "Template Validation Issue", 2);
+                }
+            }
+            catch(Exception err)
+            {
+                getThread.Abort();
+                Globals.DisplayErrorMessage("There was an error on function "
+                    + Globals.GetCurrentMethod() + ":\n" + err.GetType().ToString() +
+                    "n\nPlease contact TFS Support", "Error", 1);
             }
         }
 

@@ -29,6 +29,9 @@ namespace TFSUtil
             enableLoadFromTFS();
         }
 
+        /// <summary>
+        /// Loads all custom field values (Textfield1/Remarks1 et al)
+        /// </summary>
         private void loadValues()
         {
             //CustomFieldConfig cfc = new CustomFieldConfig();
@@ -48,6 +51,11 @@ namespace TFSUtil
             }            
         }
 
+        /// <summary>
+        /// Updates the xml of the custom field mapping for 'TextField'
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
             //var textBoxes = groupBox1.Controls.OfType<TextBox>();
@@ -63,6 +71,11 @@ namespace TFSUtil
             xdoc.Save(@"References\CustomFields.xml");
         }
 
+        /// <summary>
+        /// Updates the xml of the custom field mapping for 'TextField'
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button2_Click(object sender, EventArgs e)
         {
             //var textBoxes = groupBox1.Controls.OfType<TextBox>();
@@ -78,6 +91,11 @@ namespace TFSUtil
             xdoc.Save(@"References\CustomFields.xml");
         }
 
+        /// <summary>
+        /// Automatically selects a value on the list box of this form upon load.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CustomFieldConfig_Load(object sender, EventArgs e)
         {
             lst_Otptions.SelectedIndex = 0;
@@ -85,6 +103,11 @@ namespace TFSUtil
             //combo_tcTemplatelist.SelectedIndex = 0;
         }
 
+        /// <summary>
+        /// Load the datagrid with the fields from the xml defined from the comboboxes
+        /// This applies to both test case and defect
+        /// </summary>
+        /// <param name="listFrom"></param>
         private void loadTestCaseFields(string listFrom)
         {
             dgv_TestCaseFields.DataSource = null;
@@ -92,13 +115,6 @@ namespace TFSUtil
             dgv_TestCaseFields.Refresh();
             testmanTFS tm = new testmanTFS();
             tm.loadXMLTCFields(listFrom);
-            //Load fields here
-            //DataTable dt = new DataTable();
-            //dt.Columns.Add("TestCaseFields", typeof(string));
-            //for (int x = 0; x <= tm.xmlTestCaseFields.Count - 1; x++)
-            //{
-            //    dt.Rows.Add(new string[] { tm.xmlTestCaseFields[x] });
-            //}
 
             DataGridViewTextBoxColumn tf = new DataGridViewTextBoxColumn();
             tf.HeaderText = "Fields";
@@ -115,11 +131,13 @@ namespace TFSUtil
             {
                 rows.Add(new string[] { tm.xmlTestCaseFields[x] });
             }
-
-            //dgv_TestCaseFields.DataSource = dt;
         }
 
-
+        /// <summary>
+        /// Panel switching happens when listbox options are selected    
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void lst_Otptions_SelectedIndexChanged(object sender, EventArgs e)
         {
             switch (lst_Otptions.SelectedItem.ToString())
@@ -141,42 +159,9 @@ namespace TFSUtil
             }
         }
 
-        private void showCurrentLabel()
-        {
-            //Label currentLabel = new Label();
-            //panel_TestCaseFields.Controls.Add(currentLabel);
-            //currentLabel.Size = new System.Drawing.Size(150, 13);
-            //currentLabel.Location = new Point(6, 35);
-            //currentLabel.Text = "Current Test Case Template: ";
-            //currentLabel.Name = "LabelThat";
-            
-            //Label currentLabelDef = new Label();            
-            //currentLabelDef.Location = new Point(6, 60);
-            //currentLabelDef.Size = new System.Drawing.Size(150, 13);
-            //currentLabelDef.Text = "Current Defect Template: ";
-            //currentLabelDef.Name = "LabelThatDef";
-            //panel_TestCaseFields.Controls.Add(currentLabelDef);
-            //AddCurrentLabels();
-        }
-
-        private void AddCurrentLabels()
-        {
-            //Label tryLabel = new Label();
-            
-            //tryLabel.Name = "LabelThis";
-            //tryLabel.Location = new Point(155, 35);
-            //tryLabel.Size = new System.Drawing.Size(300, 13);
-            //tryLabel.Text = Internals.Globals.getTestCaseFieldsFromSetting + ".xml";
-            //panel_TestCaseFields.Controls.Add(tryLabel);
-
-            //Label tryLabelDef = new Label();            
-            //tryLabelDef.Name = "LabelThisDef";
-            //tryLabelDef.Location = new Point(155, 60);
-            //tryLabelDef.Size = new System.Drawing.Size(300, 13);
-            //tryLabelDef.Text = Internals.Globals.getDefectFieldsFromSetting + ".xml";
-            //panel_TestCaseFields.Controls.Add(tryLabelDef);
-        }
-
+        /// <summary>
+        /// Loads the test case templates that are available and otherwise saved in the references directory
+        /// </summary>
         private void loadTemplateComboBox()
         {
             combo_tcTemplatelist.DataSource = new BindingSource(xmlItems, null);
@@ -189,19 +174,15 @@ namespace TFSUtil
 
         private void loadTemplateXMLs()
         {
-            xmlItems.Clear();
-            
-            IEnumerable<string> dirs = Directory.GetFiles(@"References\").Where(file => Regex.IsMatch(file, "TestCaseFields.*xml"));
-            //            string[] dirs = Directory.GetFiles(@"References\", "DefectFields*.xml, TestCaseFields*.xml");           
+            xmlItems.Clear();            
+            IEnumerable<string> dirs = Directory.GetFiles(@"References\").Where(file => Regex.IsMatch(file, "TestCaseFields.*xml"));                    
             foreach (string dir in dirs)
             {
                 xmlItems.Add(dir, dir.Substring(dir.LastIndexOf("\\")+1));
             }
 
             xmlItemsDefect.Clear();
-
-            IEnumerable<string> dirsDefect = Directory.GetFiles(@"References\").Where(file => Regex.IsMatch(file, "DefectFields.*xml"));
-            //            string[] dirs = Directory.GetFiles(@"References\", "DefectFields*.xml, TestCaseFields*.xml");           
+            IEnumerable<string> dirsDefect = Directory.GetFiles(@"References\").Where(file => Regex.IsMatch(file, "DefectFields.*xml"));            
             foreach (string dir in dirsDefect)
             {
                 xmlItemsDefect.Add(dir, dir.Substring(dir.LastIndexOf("\\") + 1));
@@ -316,7 +297,7 @@ namespace TFSUtil
             }
             else
             {
-                MessageBox.Show("Please load the template file before editing");
+                Globals.DisplayErrorMessage("Please load the template file before editing", "Error", 1);                
             }
             
         }
@@ -620,11 +601,11 @@ namespace TFSUtil
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception err)
             {
-                Globals.DisplayErrorMessage("There was an error on funtion "
-                    + Globals.GetCurrentMethod() + ":\n" + ex.GetType().ToString() +
-                    "n\nPlease contact administrator", "Error", 1);
+                Globals.DisplayErrorMessage("There was an error on function "
+                    + Globals.GetCurrentMethod() + ":\n" + err.GetType().ToString() +
+                    "n\nPlease contact TFS Support", "Error", 1);
             }
 
         }

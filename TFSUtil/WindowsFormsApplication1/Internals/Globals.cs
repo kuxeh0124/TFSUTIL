@@ -9,6 +9,7 @@ using System.Xml.Linq;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace TFSUtil.Internals
 {
@@ -103,30 +104,43 @@ namespace TFSUtil.Internals
         /// <param name="errorMsg"></param>
         /// <param name="getCaption"></param>
         /// <param name="typeMsg"></param>
-        public static void DisplayErrorMessage(string errorMsg, string getCaption, int typeMsg)
+        public static DialogResult DisplayErrorMessage(string errorMsg, string getCaption, int typeMsg)
         {
             switch(typeMsg)
             {
                 case 1:
-                    MessageBox.Show(errorMsg, getCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    break;
+                    return MessageBox.Show(errorMsg, getCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 case 2:
-                    MessageBox.Show(errorMsg, getCaption, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    break;
+                    return MessageBox.Show(errorMsg, getCaption, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 case 3:
-                    MessageBox.Show(errorMsg, getCaption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    break;
+                    return MessageBox.Show(errorMsg, getCaption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 case 4:
-                    MessageBox.Show(errorMsg, getCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
-                    break;
+                    return MessageBox.Show(errorMsg, getCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
                 case 5:
-                    MessageBox.Show(errorMsg, getCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    break;
+                    return MessageBox.Show(errorMsg, getCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);                    
                 case 6:
-                    MessageBox.Show(errorMsg, getCaption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-                    break;
+                    return MessageBox.Show(errorMsg, getCaption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                default:
+                    return DialogResult.Ignore;
             }
             
+        }
+        public static void myWaitForm()
+        {
+            Form waitForm = new Form();
+            waitForm.ControlBox = false;
+            waitForm.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            waitForm.Size = new Size(200, 80);
+            waitForm.StartPosition = FormStartPosition.CenterParent;
+
+            Label waitLabel = new Label();
+            waitLabel.Size = new Size(150, 60);
+            waitLabel.Font = new Font("Arial", 11, FontStyle.Bold);
+            waitLabel.Location = new Point(30, 10);
+
+            waitLabel.Text = "Processing...\nPlease Wait.";
+            waitForm.Controls.Add(waitLabel);            
+            waitForm.ShowDialog();
         }
     }
 }

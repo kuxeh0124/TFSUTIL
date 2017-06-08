@@ -988,6 +988,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.Name = "TFSUtilUI";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "TFS Defect And Test Case Utility";
             this.defMan.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
